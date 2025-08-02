@@ -11,7 +11,7 @@ html{
 
 body{
     padding: min(50px, 7%);
-    background-color: rgb(13, 13, 20);
+    background-color: rgb(30, 30, 35);
 }
 
 h1{
@@ -24,9 +24,20 @@ h1{
     border-radius: 10px;
     background-color:#222429;
     text-align: center;
-    width: max(250px,20%);
-
 }
+    .card:hover{
+        cursor: pointer;
+    }
+    .card.card--focussed {
+        width: min(992px,54vh);
+        height: min(1403px,75vh);
+        animation: expand 0.5s ease;
+    }
+    .card.card--unfocussed{
+    width: max(250px,20%);
+    }
+
+
 .gallery {
   display: flex;
   flex: 2 1 auto;
