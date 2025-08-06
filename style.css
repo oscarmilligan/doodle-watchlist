@@ -18,7 +18,11 @@ h1{
     margin: 30px 0;
 }
 
-.card{
+.hidden{
+    opacity: 0;
+}
+
+.card, #placeholder{
     padding: 2em;
     border: 1px solid rgb(75,82,92);
     border-radius: 10px;
@@ -28,14 +32,48 @@ h1{
     .card:hover{
         cursor: pointer;
     }
-    .card.card--focussed {
+    .card.card--focused {
+        position: fixed;
         width: min(992px,54vh);
         height: min(1403px,75vh);
         animation: expand 0.5s ease;
+        top:50px;
+        z-index: 99;
     }
-    .card.card--unfocussed{
-    width: max(250px,20%);
+    .card.card--unfocused, #placeholder{
+        position: relative;
+        width: max(250px,20vw);
+        height: max(250px,20vh);
+        /* animation: unexpand 0.5s ease; */
+        z-index: 0;
     }
+
+@keyframes expand {
+    0% {
+        position: fixed;
+        width: max(250px,20vw);
+        height: max(250px,20vh);
+    }
+    100% {
+        position: fixed;
+        width: min(992px,54vh);
+        height: min(1403px,75vh);
+    }
+}
+@keyframes unexpand {
+    0% {
+        position: fixed;
+        width: min(992px,54vh);
+        height: min(1403px,75vh);
+    }
+    100% {
+        position: fixed;
+        width: max(250px,20vw);
+        height: max(250px,20vh);
+    }
+    
+}
+
 
 
 .gallery {
