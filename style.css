@@ -47,7 +47,7 @@ h1{
         position: relative;
         width: max(250px,20vw);
         height: max(250px,20vh);
-        animation: unexpand 0.5s ease; 
+        /* animation: unexpand 0.5s ease;  */
         z-index: 0;
         left: 0;
         top: 0;

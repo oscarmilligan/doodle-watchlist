@@ -1,6 +1,4 @@
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+
   const focus_card = (card) => {
     if (card.classList.contains("card--unfocused") || card.classList.contains("card--onload")){
         // get card position
@@ -44,7 +42,6 @@ function sleep(ms) {
         
         card.classList.remove('card--focused');
         card.classList.add('card--unfocused');
-        sleep(1000)
         void card.style;
     }
     
