@@ -23,11 +23,15 @@ h1{
 }
 
 .card, #placeholder{
+    --card-left: 0px;
+    --card-top: 0px;
+
     padding: 2em;
     border: 1px solid rgb(75,82,92);
     border-radius: 10px;
     background-color:#222429;
     text-align: center;
+    
 }
     .card:hover{
         cursor: pointer;
@@ -36,16 +40,22 @@ h1{
         position: fixed;
         width: min(992px,54vh);
         height: min(1403px,75vh);
-        animation: expand 0.5s ease;
-        top:50px;
+        animation: expand 0.5s ease forwards;
         z-index: 99;
     }
     .card.card--unfocused, #placeholder{
         position: relative;
         width: max(250px,20vw);
         height: max(250px,20vh);
-        /* animation: unexpand 0.5s ease; */
+        animation: unexpand 0.5s ease; 
         z-index: 0;
+        left: 0;
+        top: 0;
+        transform: none;
+    }
+    .card.card--onload {
+        width: max(250px,20vw);
+        height: max(250px,20vh);
     }
 
 @keyframes expand {
@@ -58,18 +68,25 @@ h1{
         position: fixed;
         width: min(992px,54vh);
         height: min(1403px,75vh);
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
     }
 }
+
 @keyframes unexpand {
     0% {
-        position: fixed;
         width: min(992px,54vh);
         height: min(1403px,75vh);
     }
+
     100% {
-        position: fixed;
         width: max(250px,20vw);
         height: max(250px,20vh);
+        
+        left: var(--card-left);
+        top: var(--card-top);
+        transform: translateX(-50%) translateY(-50%);
     }
     
 }
