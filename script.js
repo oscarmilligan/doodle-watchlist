@@ -7,7 +7,8 @@ const focus_card = (card) => {
     if (card != card_focussed && (card.classList.contains("card--unfocused") || card.classList.contains("card--onload"))){
         // get card position
         const leftpos = card.offsetLeft;
-        const toppos = card.offsetTop;
+        
+        const toppos = card.offsetTop - window.scrollY;
         const width = card.width;
         const height = card.height;
         console.log(leftpos+"px",toppos +"px")
