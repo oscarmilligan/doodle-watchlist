@@ -19,12 +19,11 @@ h1{
 }
 
 .hidden{
-    opacity: 0;
+    opacity: 0; 
+    pointer-events: none
 }
 
 .card, #placeholder{
-    --card-left: 0px;
-    --card-top: 0px;
 
     padding: 2em;
     border: 1px solid rgb(75,82,92);
@@ -41,11 +40,11 @@ h1{
         width: min(992px,54vh);
         height: min(1403px,75vh);
         animation: expand 0.5s ease forwards;
-        z-index: 99;
+        z-index: 10;
     }
     .card.card--unfocused, #placeholder{
         position: relative;
-        width: max(250px,20vw);
+        width: max(250px,20vh);
         height: max(250px,20vh);
         /* animation: unexpand 0.5s ease;  */
         z-index: 0;
@@ -54,26 +53,27 @@ h1{
         transform: none;
     }
     .card.card--onload {
-        width: max(250px,20vw);
+        width: max(250px,20vh);
         height: max(250px,20vh);
     }
 
-@keyframes expand {
-    0% {
-        position: fixed;
-        width: max(250px,20vw);
-        height: max(250px,20vh);
+    @keyframes expand {
+        0% {
+            position: fixed;
+            width: max(250px,20vh);
+            height: max(250px,20vh);
+        }
+        100% {
+            position: fixed;
+            width: min(992px,54vh);
+            height: min(1403px,75vh);
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
     }
-    100% {
-        position: fixed;
-        width: min(992px,54vh);
-        height: min(1403px,75vh);
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-    }
-}
 
+/* 
 @keyframes unexpand {
     0% {
         width: min(992px,54vh);
@@ -81,7 +81,7 @@ h1{
     }
 
     100% {
-        width: max(250px,20vw);
+        width: max(250px,20vh);
         height: max(250px,20vh);
         
         left: var(--card-left);
@@ -89,9 +89,7 @@ h1{
         transform: translateX(-50%) translateY(-50%);
     }
     
-}
-
-
+} */
 
 .gallery {
   display: flex;
@@ -105,3 +103,57 @@ h1{
   margin: 0 auto;
   padding: 20px 10px;
 }
+
+#canvas-area{ 
+    position: fixed;
+    background-color: #2e3137c3;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 10px;
+    border: 1px solid rgb(75,82,92);
+    width: min(1300px,80vh);
+    height: min(1503px,95vh);
+    z-index: 20;
+}
+    #canvas-area:not(.hidden){
+        transition: 0.5s ease-in 0.5s;
+    }
+#canvas{
+    position: absolute;
+    width: min(992px,54vh);
+    height: min(1403px,75vh);
+    padding: 2em;
+    border: 1px solid rgb(75,82,92);
+    transform: translateX(-50%) translateY(7.5%);   
+    border-radius: 10px;
+    transition: all 6.5s ease 6.5s;
+    z-index: 80;
+    background-color: antiquewhite;
+}
+.close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+}
+    .close:hover {
+    opacity: 1;
+    }
+    .close:before, .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #ffffff;
+    }
+    .close:before {
+    transform: rotate(45deg);
+    }
+    .close:after {
+    transform: rotate(-45deg);
+    }
+
