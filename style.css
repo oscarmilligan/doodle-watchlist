@@ -3,6 +3,21 @@
     padding:0;
 }
 
+:root{
+    --clr-body-bg: rgb(30, 30, 35);
+    --clr-card-bg: #faebd7;
+    --clr-card-border: rgb(75,82,92);
+    --clr-border-overlay: rgb(75,82,92);
+    --clr-overlay-transparent: #2e3137c3;
+    --clr-text: white;
+    --clr-heading: white;
+
+    --clr-tool-bg: #464857;
+    --clr-tool-hover:#a0a4c6;
+
+    --overlay-opacity: 0.25;
+}
+
 html{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
@@ -11,11 +26,12 @@ html{
 
 body{
     padding: min(50px, 7%);
-    background-color: rgb(30, 30, 35);
+    background-color: var(--clr-body-bg);
 }
 
 h1{
     margin: 30px 0;
+    color: var(--clr-heading);
 }
 
 .hidden{
@@ -27,10 +43,9 @@ h1{
     --canv-left: 0px;
     --canv-top: 0px;
 
-    padding: 2em;
-    border: 1px solid rgb(75,82,92);
+    border: 1px solid var(--clr-card-border);
     border-radius: 10px;
-    background-color:#222429;
+    background-color:var(--clr-card-bg);
     text-align: center;
     
 }
@@ -107,14 +122,14 @@ h1{
 
 #canvas-area{ 
     position: fixed;
-    background-color: #2e3137c3;
+    background-color: var(--clr-overlay-transparent);
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     border-radius: 10px;
-    border: 1px solid rgb(75,82,92);
+    border: 1px solid var(--clr-overlay-transparent);
     width: min(1300px,80vh);
-    height: min(1503px,95vh);
+    height: min(1403px,75vh)+5vh;
     z-index: 20;
     display: flex;
 }
@@ -125,11 +140,11 @@ h1{
     position: relative;
     width: min(992px,54vh);
     height: min(1403px,75vh);
-    padding: 2em;
-    border: 1px solid rgb(75,82,92);
+    padding: 0;
+    border: 1px solid var(--clr-card-border);
     border-radius: 10px;
     z-index: 80;
-    background-color: antiquewhite;
+    background-color: var(--clr-card-bg);
 }
 
 #paint-area{
@@ -140,7 +155,7 @@ h1{
   justify-content: center;
   gap: 15px;
   max-width: min(1300px,80vh);
-  max-height:  min(1503px,95vh);
+  max-height:  min(1403px,75vh);
   margin: 2.5vh auto;
   padding: 20px 10px;
 }
@@ -161,10 +176,13 @@ h1{
     width: 7.5vh;
     height: 7.5vh;
     margin: 0 auto;
-    background-color:#464857
+    background-color: var(--clr-tool-bg);
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
 }
 .paint-tool:hover{
-    background-color:#a0a4c6
+    background-color:var(--clr-tool-hover);
 }
 
 #pen{
@@ -182,6 +200,7 @@ h1{
   width: 32px;
   height: 32px;
   opacity: 0.3;
+  cursor: pointer;
 }
     .close:hover {
     opacity: 1;
