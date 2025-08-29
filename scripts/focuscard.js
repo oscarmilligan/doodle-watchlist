@@ -1,5 +1,5 @@
 var card_focussed
-
+const canvas = document.getElementById("canvas")
 
 
 const focus_card = (card) => {
@@ -16,7 +16,6 @@ const focus_card = (card) => {
         console.log(leftpos+"px",toppos +"px")
 
         // get canvas position
-        canvas = document.getElementById("canvas")
         var canv_rect = canvas.getBoundingClientRect();
         const canvleft = canv_rect.left;
         const canvtop = canv_rect.top;
