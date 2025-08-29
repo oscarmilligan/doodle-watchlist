@@ -129,7 +129,7 @@ h1{
     border-radius: 10px;
     border: 1px solid var(--clr-overlay-transparent);
     width: min(1300px,80vh);
-    height: min(1403px,75vh)+5vh;
+    height: calc(min(1403px,75vh) + 10vh);
     z-index: 20;
     display: flex;
 }
