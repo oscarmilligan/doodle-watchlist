@@ -26,8 +26,26 @@
         
     </div>
     <div id="canvas-area"class="hidden">
-        <canvas id="canvas"></canvas>
+        <div id="paint-area">
+            <canvas id="canvas"></canvas>
+            <div id="paint-tools">
+                <input type="range"
+                    id="brush-size" min="1"
+                    max="50" value="5" class="paint-tool">
+                <input type="color"
+                    id="color-picker" class="paint-tool">
+                <button id="pen" class="paint-tool">
+                    Pen
+                </button>
+                <button id="eraser" class="paint-tool">
+                    Eraser
+                </button>
+                <button id="clear-canvas" class="paint-tool">
+                    Clear
+                </button>
+            </div>
+        </div>
         <a onClick="unfocus_card()" class="close"></a>
     </div>
-<script src="./script.js"></script>
+<script src="./focuscard.js"></script>
 </body>

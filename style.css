@@ -24,6 +24,8 @@ h1{
 }
 
 .card, #placeholder{
+    --canv-left: 0px;
+    --canv-top: 0px;
 
     padding: 2em;
     border: 1px solid rgb(75,82,92);
@@ -67,9 +69,8 @@ h1{
             position: fixed;
             width: min(992px,54vh);
             height: min(1403px,75vh);
-            left: 50%;
-            top: 50%;
-            transform: translateX(-50%) translateY(-50%);
+            left: var(--canv-left);
+            top: var(--canv-top);
         }
     }
 
@@ -115,22 +116,53 @@ h1{
     width: min(1300px,80vh);
     height: min(1503px,95vh);
     z-index: 20;
+    display: flex;
 }
     #canvas-area:not(.hidden){
         transition: 0.5s ease-in 0.5s;
     }
 #canvas{
-    position: absolute;
+    position: relative;
     width: min(992px,54vh);
     height: min(1403px,75vh);
     padding: 2em;
     border: 1px solid rgb(75,82,92);
-    transform: translateX(-50%) translateY(7.5%);   
     border-radius: 10px;
-    transition: all 6.5s ease 6.5s;
     z-index: 80;
     background-color: antiquewhite;
 }
+
+#paint-area{
+  display: flex;
+  flex: 2 1 auto;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 15px;
+  max-width: min(1300px,80vh);
+  max-height:  min(1503px,95vh);
+  margin: 2.5vh auto;
+  padding: 20px 10px;
+}
+
+
+
+#paint-tools{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 20px;
+    max-height: 500px;
+    min-width: 7.5vh;
+}
+
+.paint-tool{
+    position: relative;
+    width: 7.5vh;
+    height: 7.5vh;
+    margin: 0 auto;
+}
+
 .close {
   position: absolute;
   right: 16px;

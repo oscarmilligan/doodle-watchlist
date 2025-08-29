@@ -1,4 +1,13 @@
 var card_focussed
+
+// get canvas position
+canvas = document.getElementById("canvas")
+var canv_rect = canvas.getBoundingClientRect();
+const canvleft = canv_rect.left;
+const canvtop = canv_rect.top;
+console.log(canvleft,canvtop);
+
+
 const focus_card = (card) => {
     console.log(card_focussed);
     if (card_focussed) {
@@ -7,7 +16,6 @@ const focus_card = (card) => {
     if (card != card_focussed && (card.classList.contains("card--unfocused") || card.classList.contains("card--onload"))){
         // get card position
         const leftpos = card.offsetLeft;
-        
         const toppos = card.offsetTop - window.scrollY;
         const width = card.width;
         const height = card.height;
@@ -22,6 +30,11 @@ const focus_card = (card) => {
         card.style.position = "fixed";
         card.style.left = leftpos +"px";
         card.style.top = toppos +"px";
+        
+        // pass canvas position to card
+        console.log(canvleft,canvtop);
+        card.style.setProperty("--canv-left",canvleft+"px")
+        card.style.setProperty("--canv-top",canvtop+"px")
 
         // edit classes
         card.classList.contains("card--unfocused") ? card.classList.remove('card--unfocused') : card.classList.remove('card--onload');
@@ -31,6 +44,10 @@ const focus_card = (card) => {
         // unhide canvas
         const canvas_area = document.getElementById("canvas-area")
         canvas_area.classList.remove("hidden")
+
+        // // hide card after animation
+        // card.addEventListener("animationend", function() {card.classList.add("hidden")});
+        
     }
 
     // else{
@@ -49,6 +66,9 @@ const unfocus_card = (card = "N/A") => {
     // remove placeholder
     placeholder.remove();
     
+    // // unhide card
+    // card.classList.remove("hidden")
+
     // unfix card
     card.style.position = "relative";
     card.style.left = "0";
