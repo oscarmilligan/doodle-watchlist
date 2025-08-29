@@ -1,11 +1,5 @@
 var card_focussed
 
-// get canvas position
-canvas = document.getElementById("canvas")
-var canv_rect = canvas.getBoundingClientRect();
-const canvleft = canv_rect.left;
-const canvtop = canv_rect.top;
-console.log(canvleft,canvtop);
 
 
 const focus_card = (card) => {
@@ -20,6 +14,13 @@ const focus_card = (card) => {
         const width = card.width;
         const height = card.height;
         console.log(leftpos+"px",toppos +"px")
+
+        // get canvas position
+        canvas = document.getElementById("canvas")
+        var canv_rect = canvas.getBoundingClientRect();
+        const canvleft = canv_rect.left;
+        const canvtop = canv_rect.top;
+        console.log(canvleft,canvtop);
 
         // insert placeholder to grid
         const placeholder = document.createElement("div");
@@ -45,8 +46,8 @@ const focus_card = (card) => {
         const canvas_area = document.getElementById("canvas-area")
         canvas_area.classList.remove("hidden")
 
-        // // hide card after animation
-        // card.addEventListener("animationend", function() {card.classList.add("hidden")});
+        // hide card after canvas animation
+        canvas_area.addEventListener("transitionend", function() {if (card = card_focussed){card.classList.add("hidden")}});
         
     }
 
@@ -66,8 +67,8 @@ const unfocus_card = (card = "N/A") => {
     // remove placeholder
     placeholder.remove();
     
-    // // unhide card
-    // card.classList.remove("hidden")
+    // unhide card
+    card.classList.remove("hidden")
 
     // unfix card
     card.style.position = "relative";

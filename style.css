@@ -161,6 +161,18 @@ h1{
     width: 7.5vh;
     height: 7.5vh;
     margin: 0 auto;
+    background-color:#464857
+}
+.paint-tool:hover{
+    background-color:#a0a4c6
+}
+
+#pen{
+    background-image: url(img/pen.png);
+    background-size: contain;
+}
+#brush-size{
+    writing-mode: vertical-lr;
 }
 
 .close {
