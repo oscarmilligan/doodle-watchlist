@@ -5,5 +5,3 @@ const penCur = "url(img/pen-cur.png) 0 128, auto"
 const eraserImg = "url(img/eraser.png)"
 const eraserCur = "url(img/eraser-cur.png) 0 128, auto"
 
-console.log(Date.now()
-);
