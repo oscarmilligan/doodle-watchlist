@@ -16,6 +16,7 @@ const brushSize = document.getElementById("brush-size");
 const colorPicker =document.getElementById("color-picker");
 const clearCanvas = document.getElementById("clear-canvas");
 const saveButton = document.getElementById("save");
+const downloadButton = document.getElementById("download")
 let isDrawing = false;
 
 //set canvas resolution (a4 72dpi)
@@ -166,10 +167,10 @@ function saveImage(){ // update to use existing names for images which are not n
 	})
 }
 function downloadImage(){
-	imageLink = canvas.toDataURL("image/jpeg",1);
+	let imageLink = canvas.toDataURL("image/jpeg",1);
 	console.log("saved image");
 	
-	 // Create an anchor, and set the href value to our data URL
+	// Create an anchor, and set the href value to our data URL
     const createEl = document.createElement('a');
     createEl.href = imageLink;
 
@@ -190,5 +191,10 @@ eraserButton.addEventListener("click", () => {
 });
 
 saveButton.addEventListener("click", () => {
-	saveImage()
+	saveImage();
+});
+
+
+downloadButton.addEventListener("click", () => {
+	downloadImage();
 });
