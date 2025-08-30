@@ -4,16 +4,16 @@
 }
 
 :root{
-    --clr-body-bg: rgb(30, 30, 35);
-    --clr-card-bg: #faebd7;
-    --clr-card-border: rgb(75,82,92);
-    --clr-border-overlay: rgb(75,82,92);
-    --clr-overlay-transparent: #2e3137c3;
-    --clr-text: white;
-    --clr-heading: white;
+    --clr-body-bg: 	#b9a185;
+    --clr-card-bg: #dbd4cb;
+    --clr-card-border: #6b533c;
+    --clr-border-overlay: #6b533c;
+    --clr-overlay-transparent: #6b533cc3;
+    --clr-text: #0c0b07;
+    --clr-heading: #0c0b07;
 
-    --clr-tool-bg: #464857;
-    --clr-tool-hover:#a0a4c6;
+    --clr-tool-bg: #b9a185;
+    --clr-tool-hover:#ccc1b3;
 
     --overlay-opacity: 0.25;
 }
