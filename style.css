@@ -137,6 +137,8 @@ h1{
         transition: 0.5s ease-in 0.5s;
     }
 #canvas{
+    --canvas-cursor: url(img/pen-cur.png) 0 128, auto;
+
     position: relative;
     width: min(992px,54vh);
     height: min(1403px,75vh);
@@ -145,6 +147,9 @@ h1{
     border-radius: 10px;
     z-index: 80;
     background-color: var(--clr-card-bg);
+}
+#canvas:hover{
+    cursor: var(--canvas-cursor);
 }
 
 #paint-area{
@@ -187,6 +192,10 @@ h1{
 
 #pen{
     background-image: url(img/pen.png);
+    background-size: contain;
+}
+#eraser{
+    background-image: url(img/eraser.png);
     background-size: contain;
 }
 #brush-size{

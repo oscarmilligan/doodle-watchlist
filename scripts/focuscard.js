@@ -1,6 +1,4 @@
 var card_focussed
-const canvas = document.getElementById("canvas")
-
 
 const focus_card = (card) => {
     console.log(card_focussed);
