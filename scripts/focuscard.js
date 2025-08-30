@@ -1,9 +1,9 @@
 var card_focussed
 
-const focus_card = (card) => {
+const focusCard = (card) => {
     console.log(card_focussed);
     if (card_focussed) {
-        unfocus_card(card_focussed);
+        unfocusCard(card_focussed);
     }
     if (card != card_focussed && (card.classList.contains("card--unfocused") || card.classList.contains("card--onload"))){
         // get card position
@@ -54,7 +54,7 @@ const focus_card = (card) => {
     // }
     
 }
-const unfocus_card = (card = "N/A") => {
+const unfocusCard = (card = "N/A") => {
     if (card = "N/A"){
         card = card_focussed
     }

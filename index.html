@@ -12,17 +12,17 @@
     <h1>Test Page</h1>
     
     <div class="gallery">
-        <div class="card card--onload" onClick="focus_card(this)"></div> <!--replace divs with preview image-->
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
-        <div class="card card--onload" onClick="focus_card(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div> <!--replace divs with preview image-->
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
+        <div class="card card--onload" onClick="focusCard(this)"></div>
         
     </div>
     <div id="canvas-area"class="hidden">
@@ -43,9 +43,12 @@
                 <button id="clear-canvas" class="paint-tool">
                     Clear
                 </button>
+                <button id="save" class="paint-tool">
+                    Save
+                </button>
             </div>
         </div>
-        <a onClick="unfocus_card()" class="close"></a>
+        <a onClick="unfocusCard()" class="close"></a>
     </div>
 <script src="./scripts/main.js"></script>
 <script src="./scripts/focuscard.js"></script>

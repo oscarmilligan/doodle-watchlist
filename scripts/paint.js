@@ -13,6 +13,7 @@ var windowScale = 1
 const brushSize = document.getElementById("brush-size");
 const colorPicker =document.getElementById("color-picker");
 const clearCanvas = document.getElementById("clear-canvas");
+const saveButton = document.getElementById("save");
 let isDrawing = false;
 
 //set canvas resolution (a4 72dpi)
@@ -123,10 +124,32 @@ function activateEraser() {
 	canvas.style.setProperty("--canvas-cursor",eraserCur);
 }
 
+function saveImage(){
+	imageLink = canvas.toDataURL("image/jpeg",1);
+	console.log("saved image");
+	
+
+	// TEMPORARY DOWNLOAD CODE //
+	 // Create an anchor, and set the href value to our data URL
+    const createEl = document.createElement('a');
+    createEl.href = imageLink;
+
+    // This is the name of our downloaded file
+    createEl.download = "cover";
+
+    // Click the download button, causing a download, and then remove it
+    createEl.click();
+    createEl.remove();
+}
+
 penButton.addEventListener("click", () => {
 	activatePen();
 });
 
 eraserButton.addEventListener("click", () => {
 	activateEraser();
+});
+
+saveButton.addEventListener("click", () => {
+	saveImage()
 });
