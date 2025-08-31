@@ -8,6 +8,8 @@ const firebaseConfig = {
   measurementId: "G-B9GV1JLGZ0"
 };
 
+const loginDisplay = document.getElementById("login-display")
+
 // Initialize compat (FirebaseUI expects the global `firebase`)
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -30,6 +32,8 @@ const uiConfig = {
         // User successfully signed in.
         const user = authResult.user;
         console.log("User signed in:", user.email);
+
+        loginDisplay.style.display = "none";
 
         //   return false to prevent redirect
         return false
