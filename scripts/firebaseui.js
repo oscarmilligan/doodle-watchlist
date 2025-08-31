@@ -14,27 +14,39 @@ if (!firebase.apps.length) {
 }
 
 const uiConfig = {
-    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-      // User successfully signed in.
-      // Return type determines whether we continue the redirect automatically
-      // or whether we leave that to developer to handle.
-      return true;
-    },
-    uiShown: function() {
-      // The widget is rendered.
-      // Hide the loader.
-      document.getElementById('loader').style.display = 'none';
-    },
     signInFlow: 'popup',
     signInSuccessUrl: "/", // Redirect URL after login
-    signInOptions: [{
-    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    requireDisplayName: true,},
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    signInOptions: [
+        {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        requireDisplayName: false
+        },
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.GithubAuthProvider.PROVIDER_ID,
     ],
+
+    callbacks: {
+        signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        // User successfully signed in.
+        const user = authResult.user;
+        console.log("User signed in:", user.email);
+
+        //   return false to prevent redirect
+        return false
+        },
+    }
 }
+
 
 
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 ui.start("#firebaseui-auth-container", uiConfig);
+
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    console.log("Signed in user:", user.email);
+    console.log("Providers:", user.providerData.map(p => p.providerId));
+  } else {
+    console.log("No user signed in");
+  }
+});
