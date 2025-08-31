@@ -3,14 +3,33 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Test Page</title>
+        <title>Doodle Watchlist</title>
         <link rel="stylesheet" href="style.css">
+        <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
     </head>
 </html>
 
 <body>
+    <div id="sidebar">
+        <div id="sidebar-login-container">
+            <a id="log-in-open">Log In</a>
+            <a id="sign-up-open">Sign Up</a>
+        </div>
+
+        <div id="sidebar-tab-container">
+            <button class="tab-button" id="tab-button-1">Tab 1</button>
+            <button class="tab-button" id="tab-button-2">Tab 2</button>
+            <button class="tab-button" id="tab-button-3">Tab 3</button>
+            <button class="tab-button" id="tab-button-4">Tab 4</button>
+            <button class="tab-button" id="tab-button-5">Tab 5</button>
+            <button class="tab-button" id="tab-button-6">Tab 6</button>
+        </div>
+    </div>
+
+    <div class="main">
     <h1>Test Page</h1>
-    
+    <button id="expand-button">&lt</button>
     <div class="gallery">
         <div class="card card--onload" onClick="focusCard(this)"></div> <!--replace divs with preview image-->
         <div class="card card--onload" onClick="focusCard(this)"></div>
@@ -52,6 +71,8 @@
             </div>
         </div>
         <a onClick="unfocusCard()" class="close"></a>
+    </div>
+
     </div>
 <script type="module" src="./scripts/firebase.js"></script>
 <script type="module" src="./scripts/main.js"></script>
