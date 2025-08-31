@@ -26,9 +26,5 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const storage = getStorage(app);
 
-const auth = getAuth(app)
-
-// Initialize the FirebaseUI Widget using Firebase.
-// var ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 export {app, analytics, storage, ref, uploadBytes}

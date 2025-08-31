@@ -11,6 +11,12 @@ console.log(canvleft,canvtop);
 var windowScale = 1
 
 
+// image references
+const penImg = "url(img/pen.png)";
+const penCur = "url(img/pen-cur.png) 0 128, auto";
+const eraserImg = "url(img/eraser.png)";
+const eraserCur = "url(img/eraser-cur.png) 0 128, auto";
+
 // get html reference
 const brushSize = document.getElementById("brush-size");
 const colorPicker =document.getElementById("color-picker");
