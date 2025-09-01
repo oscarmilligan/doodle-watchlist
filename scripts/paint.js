@@ -1,4 +1,3 @@
-import { storage,uploadBytes,uploadBytesResumable, ref, getMetadata } from "./firebase.js";
 
 // get  context reference
 const ctx = canvas.getContext("2d");
@@ -163,7 +162,7 @@ async function saveImage(){ // update to use existing names for images which are
 	let imageLink = canvas.toDataURL("image/jpeg",1);
 	console.log("saved image");
 	
-	let imagePath = `users/${window.user.uid}/images/img_${Date.now()}.jpg`;
+	let imagePath = `users/${window.user.uid}/images/${Date.now()}.jpg`;
 
 	let storageRef = firebase.storage().ref(imagePath);
 
@@ -181,7 +180,7 @@ async function saveImage(){ // update to use existing names for images which are
   console.log("File size (bytes):", imageBlob.size);
   console.log("Detected content type:", imageBlob.type);
   console.log("Metadata being sent:", metadata);
-	console.log("Default bucket:", storage.app.options.storageBucket);
+	console.log("Default bucket:", firebase.storage().app.options.storageBucket);
 
 	console.log("Auth user:", window.auth.currentUser?.uid);
 const token =  await auth.currentUser?.getIdToken();
