@@ -24,13 +24,19 @@ const uiConfig = {
         requireDisplayName: false
         },
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        {
+        provider: firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        scopes: ['user:email'] // important!
+      }
     ],
 
     callbacks: {
         signInSuccessWithAuthResult: function(authResult, redirectUrl) {
         // User successfully signed in.
         const user = authResult.user;
+        window.user = user
+        console.log(user);
+        
         console.log("User signed in:", user.email);
 
         loginDisplay.style.display = "none";
@@ -54,3 +60,4 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("No user signed in");
   }
 });
+window.auth = firebase.auth()

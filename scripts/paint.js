@@ -1,4 +1,4 @@
-import { storage, uploadBytes, ref } from "./firebase.js";
+import { storage,uploadBytes,uploadBytesResumable, ref, getMetadata } from "./firebase.js";
 
 // get  context reference
 const ctx = canvas.getContext("2d");
@@ -159,19 +159,70 @@ function dataURItoBlob(dataURI) {
 
 }
 
-function saveImage(){ // update to use existing names for images which are not new
+async function saveImage(){ // update to use existing names for images which are not new
 	let imageLink = canvas.toDataURL("image/jpeg",1);
 	console.log("saved image");
 	
-	let imagePath = `images/img_${Date.now()}.jpg`;
+	let imagePath = `users/${window.user.uid}/images/img_${Date.now()}.jpg`;
 
-	let imageRef = ref(storage, imagePath);
+	let storageRef = firebase.storage().ref(imagePath);
 
 	let imageBlob = dataURItoBlob(imageLink);
-	uploadBytes(imageRef, imageBlob).then((snapshot) => {
-		console.log("Uploaded file:", imagePath)
-	})
+
+	let metadata = {"contentType":"image/jpeg",}
+
+	console.log(imageBlob.size);
+	
+	
+  // upload debug info
+  console.log("---- Upload Debug Info ----");
+  console.log("Auth UID:", user.uid);
+  console.log("Upload path:", imagePath);
+  console.log("File size (bytes):", imageBlob.size);
+  console.log("Detected content type:", imageBlob.type);
+  console.log("Metadata being sent:", metadata);
+	console.log("Default bucket:", storage.app.options.storageBucket);
+
+	console.log("Auth user:", window.auth.currentUser?.uid);
+const token =  await auth.currentUser?.getIdToken();
+console.log("Auth token:", token ? token.substring(0,20) + "..." : "none");
+console.log("window.user.uid:", window.user?.uid);
+console.log("currentUser.uid:", auth.currentUser?.uid);
+console.log("Is Blob:", imageBlob instanceof Blob);
+  console.log("---------------------------");
+
+	
+  // Upload the file
+  const uploadTask = storageRef.put(imageBlob, metadata);
+
+
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      // Optional: progress monitoring
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log("Upload is " + progress.toFixed(2) + "% done");
+    },
+    (error) => {
+      console.error("Upload failed:", error);
+    },
+    () => {
+      // Upload completed successfully
+      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        console.log("File available at", downloadURL);
+
+        // Optionally get server-side metadata
+        uploadTask.snapshot.ref.getMetadata().then((meta) => {
+          console.log("---- Server-side metadata ----");
+          console.log(meta);
+          console.log("-------------------------------");
+        });
+      });
+    }
+  );
 }
+	
+
 function downloadImage(){
 	let imageLink = canvas.toDataURL("image/jpeg",1);
 	console.log("saved image");
