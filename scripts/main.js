@@ -56,7 +56,7 @@ function loadCards(uid){
             focusCard(card);
         });
         // load image
-        storageRef.child(`/images/${imageId}.jpg`).getDownloadURL()
+        storageRef.child(`/images/${imageId}.png`).getDownloadURL()
         .then((url) => {
             card.style.setProperty("--entry-image","url("+url+")")
         })
@@ -92,7 +92,7 @@ function updateCard(card) {
         const gallery = document.getElementById("gallery")
         
         // load image
-        storageRef.child(`/images/${imageId}.jpg`).getDownloadURL()
+        storageRef.child(`/images/${imageId}.png`).getDownloadURL()
         .then((url) => {
             console.log("retrieved image");
             

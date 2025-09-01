@@ -162,18 +162,18 @@ function dataURItoBlob(dataURI) {
 }
 
 async function saveImage(){ // update to use existing names for images which are not new
-	let imageLink = canvas.toDataURL("image/jpeg",1);
+	let imageLink = canvas.toDataURL("image/png",1);
 	console.log("saved image");
 	
   let imageId = canvas.style.getPropertyValue("--entry-id");
 
-	let imagePath = `users/${user.uid}/images/${imageId}.jpg`;
+	let imagePath = `users/${user.uid}/images/${imageId}.png`;
 
 	let storageRef = firebase.storage().ref(imagePath);
 
 	let imageBlob = dataURItoBlob(imageLink);
 
-	let metadata = {"contentType":"image/jpeg",}
+	let metadata = {"contentType":"image/png",}
 
 	console.log(imageBlob.size);
 	
@@ -214,8 +214,18 @@ console.log("Is Blob:", imageBlob instanceof Blob);
       // Upload completed successfully
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
-        
-        updateCard(window.card_focused)
+        db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${imageId}`).set({
+        name: "Epic Film",
+        rating: 4.5,
+        imageId: imageId
+        })
+        .then(() => {
+            console.log("Document written with ID: ", imageId);
+            updateCard(window.card_focused)
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
         
 
         // Optionally get server-side metadata
@@ -228,23 +238,13 @@ console.log("Is Blob:", imageBlob instanceof Blob);
     }
   );
 
-  db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${imageId}`).set({
-        name: "Epic Film",
-        rating: 4.5,
-        imageId: imageId
-    })
-    .then(() => {
-        console.log("Document written with ID: ", imageId);
-    })
-    .catch((error) => {
-        console.error("Error adding document: ", error);
-    });
+  
   
 }
 	
 
 function downloadImage(){
-	let imageLink = canvas.toDataURL("image/jpeg",1);
+	let imageLink = canvas.toDataURL("image/png",1);
 	console.log("saved image");
 	
 	// Create an anchor, and set the href value to our data URL

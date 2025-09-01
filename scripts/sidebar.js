@@ -12,13 +12,16 @@ function createCard(){
     // create card element
     const card = document.createElement("div");
     card.classList.add("card","card--onload");
-    card.style.setProperty("--entry-id",Date.now())
+    const cardID = Date.now()
+    card.style.setProperty("--entry-id",cardID)
     card.addEventListener("click",() => {
         focusCard(card);
     });
 
     
     gallery.appendChild(card);
+    console.log("Created card with id:",cardID);
+    
 }
 
 createButton.addEventListener("click",() => {
