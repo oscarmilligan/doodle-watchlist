@@ -59,6 +59,7 @@ body{
 
 /* sidebar styling */
 #sidebar {
+    display: grid;
     height: 100%;
     position: fixed;
     z-index: 1;
@@ -68,6 +69,7 @@ body{
     overflow-x: hidden;
     padding-top: 20px;
     transition: ease 0.4s;
+    justify-content: space-between;
 }
 #sidebar.sidebar--minimised{
     transform: translateX(-100%);
@@ -149,6 +151,8 @@ h1{
 }
 
 .card, #placeholder{
+    --entry-id: 0;
+    --entry-image: 0;
     --canv-left: 0px;
     --canv-top: 0px;
 
@@ -156,6 +160,7 @@ h1{
     border-radius: 10px;
     background-color:var(--clr-card-bg);
     text-align: center;
+    background-image: var(--entry-image);
     
 }
     .card:hover{
@@ -168,19 +173,16 @@ h1{
         animation: expand 0.5s ease forwards;
         z-index: 10;
     }
-    .card.card--unfocused, #placeholder{
+    .card.card--unfocused, .card.card--onload, #placeholder{
         position: relative;
         width: max(250px,20vh);
         height: max(250px,20vh);
+        background-size: 100%;
         /* animation: unexpand 0.5s ease;  */
         z-index: 0;
         left: 0;
         top: 0;
         transform: none;
-    }
-    .card.card--onload {
-        width: max(250px,20vh);
-        height: max(250px,20vh);
     }
 
     @keyframes expand {
@@ -248,6 +250,7 @@ h1{
     }
 #canvas{
     --canvas-cursor: url(img/pen-cur.png) 0 128, auto;
+    --entry-id: 0;
 
     position: relative;
     width: min(992px,54vh);

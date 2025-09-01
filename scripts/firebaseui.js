@@ -1,8 +1,20 @@
 
+const firebaseConfig = {
+  apiKey: "AIzaSyBs47VrPynDv9ULMJVl12-3YQHisLpOFIo",
+  authDomain: "watchlist-canvas.firebaseapp.com",
+  projectId: "watchlist-canvas",
+  storageBucket: "watchlist-canvas.firebasestorage.app",
+  messagingSenderId: "725234883961",
+  appId: "1:725234883961:web:ed3a3b322c045e214663a8",
+  measurementId: "G-B9GV1JLGZ0"
+};
+
 const loginDisplay = document.getElementById("login-display")
 
 // Initialize compat (FirebaseUI expects the global `firebase`)
-
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
 const uiConfig = {
     signInFlow: 'popup',
@@ -41,12 +53,4 @@ const uiConfig = {
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 ui.start("#firebaseui-auth-container", uiConfig);
 
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    console.log("Signed in user:", user.email);
-    console.log("Providers:", user.providerData.map(p => p.providerId));
-  } else {
-    console.log("No user signed in");
-  }
-});
 window.auth = firebase.auth()

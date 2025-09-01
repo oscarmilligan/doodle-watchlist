@@ -1,11 +1,12 @@
-var card_focussed
+import { resize } from "./paint.js";
+var card_focused
 
-const focusCard = (card) => {
-    console.log(card_focussed);
-    if (card_focussed) {
-        unfocusCard(card_focussed);
+function focusCard (card){
+    console.log(card_focused);
+    if (card_focused) {
+        unfocusCard(card_focused);
     }
-    if (card != card_focussed && (card.classList.contains("card--unfocused") || card.classList.contains("card--onload"))){
+    if (card != card_focused && (card.classList.contains("card--unfocused") || card.classList.contains("card--onload"))){
         // get card position
         const leftpos = card.offsetLeft;
         const toppos = card.offsetTop - window.scrollY;
@@ -18,6 +19,34 @@ const focusCard = (card) => {
         const canvleft = canv_rect.left;
         const canvtop = canv_rect.top;
         console.log(canvleft,canvtop);
+        
+        // update canvas with entry
+        // get  context reference
+        const ctx = canvas.getContext("2d");
+        const imageDownloadURL = card.style.getPropertyValue("--entry-image")
+        console.log("Drawing on canvas:",imageDownloadURL);
+        
+        if (imageDownloadURL != "") {
+            
+	        ctx.setTransform(1,0,0,1,0,0); //so image ligns up
+            const image = new Image();
+            image.setAttribute('crossorigin', 'anonymous'); // prevent security error
+            image.src = imageDownloadURL.slice(4,-1);
+            image.onload = () => {
+                ctx.imageSmoothingEnabled = false;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image,0, 0);
+            };
+            console.log("Successfully loaded canvas");
+        }
+        else{
+            console.log("clearing canvas");
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        canvas.style.setProperty("--entry-id",card.style.getPropertyValue("--entry-id"));
+            
 
         // insert placeholder to grid
         const placeholder = document.createElement("div");
@@ -37,14 +66,14 @@ const focusCard = (card) => {
         // edit classes
         card.classList.contains("card--unfocused") ? card.classList.remove('card--unfocused') : card.classList.remove('card--onload');
         card.classList.add('card--focused');
-        card_focussed = card;
+        card_focused = card;
 
         // unhide canvas
         const canvas_area = document.getElementById("canvas-area")
         canvas_area.classList.remove("hidden")
 
         // hide card after canvas animation
-        canvas_area.addEventListener("transitionend", function() {if (card = card_focussed){card.classList.add("hidden")}});
+        canvas_area.addEventListener("transitionend", function() {if (card = card_focused){card.classList.add("hidden")}});
         
     }
 
@@ -52,11 +81,11 @@ const focusCard = (card) => {
     //     //unfocus card
     //     unfocus_card(card)
     // }
-    
+    window.card_focused = card_focused
 }
-const unfocusCard = (card = "N/A") => {
+function unfocusCard(card = "none") {
     if (card = "N/A"){
-        card = card_focussed
+        card = card_focused
     }
     // get placeholder position
     const placeholder = document.getElementById("placeholder");
@@ -74,9 +103,13 @@ const unfocusCard = (card = "N/A") => {
 
     card.classList.remove('card--focused');
     card.classList.add('card--unfocused');
-    card_focussed = null;
+    card_focused = null;
 
     // hide canvas area
     const canvas_area = document.getElementById("canvas-area")
     canvas_area.classList.add("hidden")
+
+    window.card_focused= card_focused
 }
+
+export {focusCard, unfocusCard}

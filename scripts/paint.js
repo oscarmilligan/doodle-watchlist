@@ -1,3 +1,5 @@
+import {unfocusCard} from "./focuscard.js"
+import {updateCard} from "./main.js"
 
 // get  context reference
 const ctx = canvas.getContext("2d");
@@ -22,6 +24,7 @@ const colorPicker =document.getElementById("color-picker");
 const clearCanvas = document.getElementById("clear-canvas");
 const saveButton = document.getElementById("save");
 const downloadButton = document.getElementById("download")
+const closeButton = document.getElementById("close-paint")
 let isDrawing = false;
 
 //set canvas resolution (a4 72dpi)
@@ -86,7 +89,7 @@ clearCanvas.addEventListener("click", () => {
 		ctx.clearRect(0, 0, canvas.width,canvas.height);
 	});
 
-// resize function in case fo canvas size change
+// resize function in case of canvas size change
 function resize(){
 	//match rendering scale
 	var wRatio =  595 / Math.min(992,0.54*window.innerHeight);
@@ -162,7 +165,9 @@ async function saveImage(){ // update to use existing names for images which are
 	let imageLink = canvas.toDataURL("image/jpeg",1);
 	console.log("saved image");
 	
-	let imagePath = `users/${window.user.uid}/images/${Date.now()}.jpg`;
+  let imageId = canvas.style.getPropertyValue("--entry-id");
+
+	let imagePath = `users/${user.uid}/images/${imageId}.jpg`;
 
 	let storageRef = firebase.storage().ref(imagePath);
 
@@ -175,7 +180,7 @@ async function saveImage(){ // update to use existing names for images which are
 	
   // upload debug info
   console.log("---- Upload Debug Info ----");
-  console.log("Auth UID:", user.uid);
+  console.log("Auth UID:", window.user.uid);
   console.log("Upload path:", imagePath);
   console.log("File size (bytes):", imageBlob.size);
   console.log("Detected content type:", imageBlob.type);
@@ -209,6 +214,9 @@ console.log("Is Blob:", imageBlob instanceof Blob);
       // Upload completed successfully
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
+        
+        updateCard(window.card_focused)
+        
 
         // Optionally get server-side metadata
         uploadTask.snapshot.ref.getMetadata().then((meta) => {
@@ -219,6 +227,19 @@ console.log("Is Blob:", imageBlob instanceof Blob);
       });
     }
   );
+
+  db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${imageId}`).set({
+        name: "Epic Film",
+        rating: 4.5,
+        imageId: imageId
+    })
+    .then(() => {
+        console.log("Document written with ID: ", imageId);
+    })
+    .catch((error) => {
+        console.error("Error adding document: ", error);
+    });
+  
 }
 	
 
@@ -254,3 +275,9 @@ saveButton.addEventListener("click", () => {
 downloadButton.addEventListener("click", () => {
 	downloadImage();
 });
+
+closeButton.addEventListener("click", () => {
+	unfocusCard();
+});
+
+export {resize}
