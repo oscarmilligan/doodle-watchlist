@@ -2,7 +2,6 @@ import { focusCard } from "./focuscard.js";
 
 // get element references
 const createButton = document.getElementById("create-button");
-const deleteButton = document.getElementById("delete-button");
 
 function createCard(){
     
