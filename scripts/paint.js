@@ -25,6 +25,7 @@ const clearCanvas = document.getElementById("clear-canvas");
 const saveButton = document.getElementById("save");
 const downloadButton = document.getElementById("download")
 const closeButton = document.getElementById("close-paint")
+const deleteButton = document.getElementById("delete-button")
 let isDrawing = false;
 
 //set canvas resolution (a4 72dpi)
@@ -165,7 +166,8 @@ async function saveImage(){ // update to use existing names for images which are
 	let imageLink = canvas.toDataURL("image/png",1);
 	console.log("saved image");
 	
-  let imageId = canvas.style.getPropertyValue("--entry-id");
+  let entryID = canvas.style.getPropertyValue("--entry-id");
+  let imageId = canvas.style.getPropertyValue("--image-id");
 
 	let imagePath = `users/${user.uid}/images/${imageId}.png`;
 
@@ -214,13 +216,13 @@ console.log("Is Blob:", imageBlob instanceof Blob);
       // Upload completed successfully
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
-        db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${imageId}`).set({
+        db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${entryID}`).set({
         name: "Epic Film",
         rating: 4.5,
         imageId: imageId
         })
         .then(() => {
-            console.log("Document written with ID: ", imageId);
+            console.log("Document written with ID: ", entryID);
             updateCard(window.card_focused)
         })
         .catch((error) => {
@@ -259,6 +261,40 @@ function downloadImage(){
     createEl.remove();
 
 }
+
+function deleteCard(card){
+  const entryId = card.style.getPropertyValue("--entry-id")
+  const imageId = card.style.getPropertyValue("--image-id")
+
+  // Create a reference to the file to delete
+  let userPath = `users/${window.user.uid}`;
+  let storageRef = firebase.storage().ref(userPath);
+
+  var imageRef = storageRef.child(`images/${imageId}.png`);
+  // Delete the file
+  console.log("Deleting file...");
+  imageRef.delete().then(() => {
+    console.log("File successfully deleted from:",`users/${window.user.uid}/images/${imageId}.png`);
+
+    // Delete the db entry
+    console.log("Deleting db entry...");
+    db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${entryId}`).delete().then(() => {
+      console.log("Database entry successfully deleted from:",`users/${window.user.uid}/entries/${entryId}`);
+      
+      // delete the card
+      unfocusCard(card);
+      card.remove();
+
+    }).catch((error) => {
+      console.log("Failed to delete db entry due to:",error);
+    })
+  }).catch((error) => {
+    console.log("Failed to delete file due to:",error);
+  });
+
+  
+}
+
 penButton.addEventListener("click", () => {
 	activatePen();
 });
@@ -279,5 +315,9 @@ downloadButton.addEventListener("click", () => {
 closeButton.addEventListener("click", () => {
 	unfocusCard();
 });
+
+deleteButton.addEventListener("click", () => {
+  deleteCard(card_focused);
+})
 
 export {resize}

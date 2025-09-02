@@ -11,8 +11,10 @@ function createCard(){
     // create card element
     const card = document.createElement("div");
     card.classList.add("card","card--onload");
-    const cardID = Date.now()
-    card.style.setProperty("--entry-id",cardID)
+    const cardID = Date.now();
+    const imageId = cardID;
+    card.style.setProperty("--entry-id",cardID);
+    card.style.setProperty("--image-id",imageId);
     card.addEventListener("click",() => {
         focusCard(card);
     });
@@ -20,6 +22,7 @@ function createCard(){
     
     gallery.appendChild(card);
     console.log("Created card with id:",cardID);
+    console.log("and image id:",imageId);
     
 }
 

@@ -2,24 +2,11 @@ import { resize } from "./paint.js";
 var card_focused
 
 function focusCard (card){
-    console.log(card_focused);
+    // console.log(card_focused);
     if (card_focused) {
         unfocusCard(card_focused);
     }
     if (card != card_focused && (card.classList.contains("card--unfocused") || card.classList.contains("card--onload"))){
-        // get card position
-        const leftpos = card.offsetLeft;
-        const toppos = card.offsetTop - window.scrollY;
-        const width = card.width;
-        const height = card.height;
-        console.log(leftpos+"px",toppos +"px")
-
-        // get canvas position
-        var canv_rect = canvas.getBoundingClientRect();
-        const canvleft = canv_rect.left;
-        const canvtop = canv_rect.top;
-        console.log(canvleft,canvtop);
-        
         // update canvas with entry
         // get  context reference
         const ctx = canvas.getContext("2d");
@@ -44,8 +31,23 @@ function focusCard (card){
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
+        
+        // get card position
+        const leftpos = card.offsetLeft;
+        const toppos = card.offsetTop - window.scrollY;
+        const width = card.width;
+        const height = card.height;
+        // console.log(leftpos+"px",toppos +"px")
+
+        // get canvas position
+        var canv_rect = canvas.getBoundingClientRect();
+        const canvleft = canv_rect.left;
+        const canvtop = canv_rect.top;
+        // console.log(canvleft,canvtop);
+        
 
         canvas.style.setProperty("--entry-id",card.style.getPropertyValue("--entry-id"));
+        canvas.style.setProperty("--image-id",card.style.getPropertyValue("--image-id"));
             
 
         // insert placeholder to grid
@@ -59,7 +61,6 @@ function focusCard (card){
         card.style.top = toppos +"px";
         
         // pass canvas position to card
-        console.log(canvleft,canvtop);
         card.style.setProperty("--canv-left",canvleft+"px")
         card.style.setProperty("--canv-top",canvtop+"px")
 
@@ -83,7 +84,7 @@ function focusCard (card){
     // }
     window.card_focused = card_focused
 }
-function unfocusCard(card = "none") {
+function unfocusCard(card = "N/A") {
     if (card = "N/A"){
         card = card_focused
     }

@@ -52,6 +52,7 @@ function loadCards(uid){
         const card = document.createElement("div");
         card.classList.add("card","card--onload");
         card.style.setProperty("--entry-id",doc.id)
+        card.style.setProperty("--image-id",imageId)
         card.addEventListener("click",() => {
             focusCard(card);
         });
