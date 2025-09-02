@@ -18,6 +18,7 @@ function createCard(){
     card.style.setProperty("--image-id",imageId);
     card.style.setProperty("--title",defaultTitle);
     card.style.setProperty("--rating",defaultRating);
+    card.style.setProperty("--entry-image","url("+"img/stars.png"+")")
     card.addEventListener("click",() => {
         focusCard(card);
     });

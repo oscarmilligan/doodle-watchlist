@@ -169,6 +169,11 @@ function dataURItoBlob(dataURI) {
 
 }
 
+function getPixelColor(data,x,y){
+  var i = 4*(x+w*y); // 
+  var color = (pixels[i]<<24) + (pixels[i+1]<<16) + (pixels[i+2]<<8) + (pixels[i+3]); // I don't care about the alpha
+}
+
 async function saveImage(){ // update to use existing names for images which are not new
 	let imageLink = canvas.toDataURL("image/png",1);
   const titleInput = document.getElementById("title-input");
