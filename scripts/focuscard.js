@@ -90,6 +90,8 @@ function focusCard (card){
     //     unfocus_card(card)
     // }
     window.card_focused = card_focused
+    console.log("The current card focused is:",card_focused);
+    
 }
 function unfocusCard(card = "N/A") {
     if (card = "N/A"){

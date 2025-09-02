@@ -175,6 +175,8 @@ function getPixelColor(data,x,y){
 }
 
 async function saveImage(){ // update to use existing names for images which are not new
+  const focusedCard = window.card_focused;
+  
 	let imageLink = canvas.toDataURL("image/png",1);
   const titleInput = document.getElementById("title-input");
 	console.log("saved image");
@@ -238,7 +240,7 @@ async function saveImage(){ // update to use existing names for images which are
         })
         .then(() => {
             console.log("Document written with ID: ", entryID);
-            updateCard(window.card_focused)
+            updateCard(focusedCard)
         })
         .catch((error) => {
             console.error("Error adding document: ", error);

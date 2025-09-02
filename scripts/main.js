@@ -87,6 +87,8 @@ function loadCards(uid){
 
 // function to update rendering of a single card
 function updateCard(card) {
+    console.log("updating card:",card);
+    
     const uid= window.user.uid;
     const entryId = card.style.getPropertyValue("--entry-id");
     console.log("Updating card with entryID",entryId,"at",`users/${uid}/entries/${entryId}`);
