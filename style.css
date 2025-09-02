@@ -175,10 +175,11 @@ h1{
     }
     .card.card--focused {
         position: fixed;
+        aspect-ratio: 595 / 842;
         width: min(992px,54vh);
-        height: min(1403px,75vh);
         animation: expand 0.5s ease forwards;
         z-index: 10;
+        background-size: contain;
     }
     .card.card--unfocused, .card.card--onload, #placeholder{
         position: relative;
@@ -194,13 +195,13 @@ h1{
     @keyframes expand {
         0% {
             position: fixed;
+            aspect-ratio: 1 / 1;
             width: max(250px,20vh);
-            height: max(250px,20vh);
         }
         100% {
             position: fixed;
+            aspect-ratio: 595 / 842;
             width: min(992px,54vh);
-            height: min(1403px,75vh);
             left: var(--canv-left);
             top: var(--canv-top);
         }
@@ -274,8 +275,8 @@ h1{
     --image-id: 0;
 
     position: relative;
+    aspect-ratio: 595 / 842;
     width: min(992px,54vh);
-    height: min(1403px,75vh);
     padding: 0;
     border: 1px solid var(--clr-card-border);
     border-radius: 10px;
@@ -335,6 +336,32 @@ h1{
 #brush-size{
     writing-mode: vertical-lr;
 }
+.canvas-container{
+    width: min(992px,54vh);
+    height: min(1403px,75vh);
+}
+
+#title-input{
+    background: none;
+    display: inline-block;
+    transform: translateY(calc(-100% - 15px));
+    position: relative;
+    bottom: 0px;
+    color: var(--clr-title);
+    text-align: center;
+    /* width: 100%; */
+    min-width: 50px;
+    max-width: 100%;
+    font-size: large;
+    font-weight: 400;
+    line-height: 13.2px;
+    text-shadow:  var(--text-shadow) 1px 1px 0px;
+    border: none;
+    z-index: 81;
+}
+    #title-input:focus{
+        outline: none;
+    }
 
 /* misc buttons */
 .close {

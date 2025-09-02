@@ -86,6 +86,8 @@ function draw(e) {
 canvas.addEventListener("mousedown", startPosition);
 canvas.addEventListener("mouseup", endPosition);
 canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseout", endPosition);
+
 clearCanvas.addEventListener("click", () => {
 		ctx.clearRect(0, 0, canvas.width,canvas.height);
 	});
