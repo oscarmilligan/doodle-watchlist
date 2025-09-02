@@ -16,7 +16,7 @@
     --clr-text-light: #b9a185;
     --clr-text-lighter: #ccc1b3;
     --clr-heading: #0c0b07;
-    --clr-title: #6b533c;
+    --clr-title: #ffffff;
 
     --clr-tool-bg: #b9a185;
     --clr-tool-hover:#ccc1b3;
@@ -27,7 +27,7 @@
     --overlay-opacity: 0.25;
 
     /* other settings */
-    --text-shadow: rgba(0, 0, 0, 0.8);
+    --text-outline: rgba(0, 0, 0, 0.8);
     --sidebar-width: 120px;
     --focus-time: 0.5s;
     
@@ -207,16 +207,21 @@ h1{
     }
 
 .title {
+    display: inline-block;
     position: absolute;
     bottom: 0px;
-    color: var(--clr-title);
-    text-align: center;
     width: 100%;
-    transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-5px);
+}
+
+.title, #title-input{
+    
+    text-align: center;
+    color: var(--clr-title);
     font-size: large;
-    font-weight: 400;
-    line-height: 13.2px;
-    text-shadow:  var(--text-shadow) 1px 1px 0px;
+    font-weight: bold;
+    line-height: 20px;
+    text-shadow: -1px -1px 0 var(--text-outline), 1px -1px 0 var(--text-outline), -1px 1px 0 var(--text-outline), 1px 1px 0 var(--text-outline);
 }
 
 /* 
@@ -343,18 +348,12 @@ h1{
 #title-input{
     background: none;
     display: inline-block;
-    transform: translateY(calc(-100% - 15px));
+    transform: translateY(calc(-100% - 9px));
     position: relative;
     bottom: 0px;
-    color: var(--clr-title);
     text-align: center;
-    /* width: 100%; */
     min-width: 50px;
     max-width: 100%;
-    font-size: large;
-    font-weight: 400;
-    line-height: 13.2px;
-    text-shadow:  var(--text-shadow) 1px 1px 0px;
     border: none;
     z-index: 81;
 }
