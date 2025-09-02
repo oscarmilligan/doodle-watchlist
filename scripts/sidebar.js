@@ -2,6 +2,7 @@ import { focusCard } from "./focuscard.js";
 
 // get element references
 const createButton = document.getElementById("create-button");
+const SignoutButton = document.getElementById("log-out-button")
 
 function createCard(){
     const defaultTitle = "New Entry";
@@ -35,6 +36,26 @@ function createCard(){
     card.appendChild(titleElement)
 }
 
+function signOut(){
+    firebase.auth().signOut().then(() => {
+        console.log("User signed out successfully");
+        const cards = document.getElementsByClassName("card")
+        for (let i = cards.length-1; i >= 0; i--){
+            cards[i].remove()
+        }
+        const loginDisplay=document.getElementById("login-display");
+        loginDisplay.style.display = "block";
+        
+        ui.start("#firebaseui-auth-container", uiConfig);
+        console.log("Displaying login screen");
+        
+    })
+}
+
 createButton.addEventListener("click",() => {
     createCard();
+})
+
+SignoutButton.addEventListener("click", () => {
+    signOut();
 })
