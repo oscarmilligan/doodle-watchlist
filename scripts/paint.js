@@ -94,9 +94,14 @@ clearCanvas.addEventListener("click", () => {
 
 // resize function in case of canvas size change
 function resize(){
+  
+  // get canvas dims
+  var canv_rect = canvas.getBoundingClientRect();
+  var width = canv_rect.width;
+  var height = canv_rect.height;
 	//match rendering scale
-	var wRatio =  595 / Math.min(992,0.54*window.innerHeight);
-	var hRatio =  842 / Math.min(1403,0.75*window.innerHeight);
+	var wRatio =  595 / width;
+	var hRatio =  842 / height;
 	ctx.setTransform(wRatio,0,0,hRatio,0,0);
 
 	// update window scale

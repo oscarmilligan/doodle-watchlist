@@ -96,8 +96,13 @@ function updateCard(card) {
         
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
-        // get entry image reference
+
+        // save doc data
         const imageId = doc.data()["imageId"]
+        const title = doc.data()["name"]
+        const rating = doc.data()["rating"]
+
+        // get storage reference
         let userPath = `users/${uid}`;
         let storageRef = firebase.storage().ref(userPath);
 
@@ -111,7 +116,6 @@ function updateCard(card) {
             card.style.setProperty("--entry-image","url("+url+")")
 
             // load title
-            const title = doc.data()["name"]
             for (const child of card.children){
                 if (child.classList.contains("title")){
                     child.textContent = title;
@@ -124,6 +128,9 @@ function updateCard(card) {
             console.log(error);
             
         });
+        // set other card properties 
+        card.style.setProperty("--title",title);
+        card.style.setProperty("--rating",rating);
         
         console.log("updated card");
     });

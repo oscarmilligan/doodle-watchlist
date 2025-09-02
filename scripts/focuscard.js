@@ -35,8 +35,8 @@ function focusCard (card){
         }
         
         //update canvas title
-        titleInput.textContent = title
-        console.log("canvas title updated");
+        titleInput.textContent = title;
+        console.log("canvas title updated to:",title);
         
 
         // get card position
