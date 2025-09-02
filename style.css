@@ -16,6 +16,7 @@
     --clr-text-light: #b9a185;
     --clr-text-lighter: #ccc1b3;
     --clr-heading: #0c0b07;
+    --clr-title: #6b533c;
 
     --clr-tool-bg: #b9a185;
     --clr-tool-hover:#ccc1b3;
@@ -26,6 +27,7 @@
     --overlay-opacity: 0.25;
 
     /* other settings */
+    --text-shadow: rgba(0, 0, 0, 0.8);
     --sidebar-width: 120px;
     
 }
@@ -153,6 +155,8 @@ h1{
 .card, #placeholder{
     --entry-id: 0;
     --entry-image: 0;
+    --title: ;
+    --rating: ;
     --image-id: 0;
     --canv-left: 0px;
     --canv-top: 0px;
@@ -202,6 +206,19 @@ h1{
         }
     }
 
+.title {
+    position: absolute;
+    bottom: 0px;
+    color: var(--clr-title);
+    text-align: center;
+    width: 100%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: large;
+    font-weight: 400;
+    line-height: 13.2px;
+    text-shadow:  var(--text-shadow) 1px 1px 0px;
+}
+
 /* 
 @keyframes unexpand {
     0% {
@@ -242,6 +259,7 @@ h1{
     transform: translateX(-50%) translateY(-50%);
     border-radius: 10px;
     border: 1px solid var(--clr-overlay-transparent);
+    
     width: min(1300px,75vh);
     height: 80%;
     z-index: 20;

@@ -41,7 +41,10 @@ function loadCards(uid){
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
         // get entry image reference
-        const imageId = doc.data()["imageId"]
+        const imageId = doc.data()["imageId"];
+        const title = doc.data()["name"];
+        const rating = doc.data()["rating"];
+
         let userPath = `users/${uid}`;
         let storageRef = firebase.storage().ref(userPath);
 
@@ -53,9 +56,17 @@ function loadCards(uid){
         card.classList.add("card","card--onload");
         card.style.setProperty("--entry-id",doc.id)
         card.style.setProperty("--image-id",imageId)
+        card.style.setProperty("--title",title)
+        card.style.setProperty("--rating",rating)
         card.addEventListener("click",() => {
             focusCard(card);
         });
+        // create title span
+        const titleElement = document.createElement("span");
+        titleElement.textContent = title;
+        titleElement.classList.add("title");
+
+
         // load image
         storageRef.child(`/images/${imageId}.png`).getDownloadURL()
         .then((url) => {
@@ -69,11 +80,12 @@ function loadCards(uid){
         
         
         gallery.appendChild(card);
+        card.appendChild(titleElement)
     });
     });
 }
 
-// function to load/update a single card
+// function to update rendering of a single card
 function updateCard(card) {
     const uid= window.user.uid;
     const entryId = card.style.getPropertyValue("--entry-id");
@@ -96,8 +108,15 @@ function updateCard(card) {
         storageRef.child(`/images/${imageId}.png`).getDownloadURL()
         .then((url) => {
             console.log("retrieved image");
-            
             card.style.setProperty("--entry-image","url("+url+")")
+
+            // load title
+            const title = doc.data()["name"]
+            for (const child of card.children){
+                if (child.classList.contains("title")){
+                    child.textContent = title;
+                }
+            }
 
         })
         .catch((error) => {

@@ -4,7 +4,8 @@ import { focusCard } from "./focuscard.js";
 const createButton = document.getElementById("create-button");
 
 function createCard(){
-    
+    const defaultTitle = "New Entry";
+    const defaultRating = 0;
     // create reference to card gallery
     const gallery = document.getElementById("gallery")
         
@@ -15,6 +16,8 @@ function createCard(){
     const imageId = cardID;
     card.style.setProperty("--entry-id",cardID);
     card.style.setProperty("--image-id",imageId);
+    card.style.setProperty("--title",defaultTitle);
+    card.style.setProperty("--rating",defaultRating);
     card.addEventListener("click",() => {
         focusCard(card);
     });
@@ -23,7 +26,12 @@ function createCard(){
     gallery.appendChild(card);
     console.log("Created card with id:",cardID);
     console.log("and image id:",imageId);
+    // create title span
+    const titleElement = document.createElement("span");
+    titleElement.textContent = defaultTitle;
+    titleElement.classList.add("title");
     
+    card.appendChild(titleElement)
 }
 
 createButton.addEventListener("click",() => {

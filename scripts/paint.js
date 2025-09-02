@@ -168,6 +168,8 @@ async function saveImage(){ // update to use existing names for images which are
 	
   let entryID = canvas.style.getPropertyValue("--entry-id");
   let imageId = canvas.style.getPropertyValue("--image-id");
+  let title = window.card_focused.style.getPropertyValue("--title");
+  let rating = window.card_focused.style.getPropertyValue("--rating");
 
 	let imagePath = `users/${user.uid}/images/${imageId}.png`;
 
@@ -190,11 +192,11 @@ async function saveImage(){ // update to use existing names for images which are
 	console.log("Default bucket:", firebase.storage().app.options.storageBucket);
 
 	console.log("Auth user:", window.auth.currentUser?.uid);
-const token =  await auth.currentUser?.getIdToken();
-console.log("Auth token:", token ? token.substring(0,20) + "..." : "none");
-console.log("window.user.uid:", window.user?.uid);
-console.log("currentUser.uid:", auth.currentUser?.uid);
-console.log("Is Blob:", imageBlob instanceof Blob);
+  const token =  await auth.currentUser?.getIdToken();
+  console.log("Auth token:", token ? token.substring(0,20) + "..." : "none");
+  console.log("window.user.uid:", window.user?.uid);
+  console.log("currentUser.uid:", auth.currentUser?.uid);
+  console.log("Is Blob:", imageBlob instanceof Blob);
   console.log("---------------------------");
 
 	
@@ -217,8 +219,8 @@ console.log("Is Blob:", imageBlob instanceof Blob);
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
         db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${entryID}`).set({
-        name: "Epic Film",
-        rating: 4.5,
+        name: title,
+        rating: rating,
         imageId: imageId
         })
         .then(() => {
