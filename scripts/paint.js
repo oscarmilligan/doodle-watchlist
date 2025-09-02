@@ -166,11 +166,12 @@ function dataURItoBlob(dataURI) {
 
 async function saveImage(){ // update to use existing names for images which are not new
 	let imageLink = canvas.toDataURL("image/png",1);
+  const titleInput = document.getElementById("title-input");
 	console.log("saved image");
 	
   let entryID = canvas.style.getPropertyValue("--entry-id");
   let imageId = canvas.style.getPropertyValue("--image-id");
-  let title = window.card_focused.style.getPropertyValue("--title");
+  let title = titleInput.textContent;
   let rating = window.card_focused.style.getPropertyValue("--rating");
 
 	let imagePath = `users/${user.uid}/images/${imageId}.png`;

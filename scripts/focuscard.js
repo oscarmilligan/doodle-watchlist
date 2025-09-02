@@ -10,7 +10,9 @@ function focusCard (card){
         // update canvas with entry
         // get  context reference
         const ctx = canvas.getContext("2d");
-        const imageDownloadURL = card.style.getPropertyValue("--entry-image")
+        const titleInput = document.getElementById("title-input");
+        const imageDownloadURL = card.style.getPropertyValue("--entry-image");
+        const title = card.style.getPropertyValue("--title");
         console.log("Drawing on canvas:",imageDownloadURL);
         
         if (imageDownloadURL != "") {
@@ -32,6 +34,11 @@ function focusCard (card){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
         
+        //update canvas title
+        titleInput.textContent = title
+        console.log("canvas title updated");
+        
+
         // get card position
         const leftpos = card.offsetLeft;
         const toppos = card.offsetTop - window.scrollY;
