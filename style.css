@@ -29,6 +29,7 @@
     /* other settings */
     --text-shadow: rgba(0, 0, 0, 0.8);
     --sidebar-width: 120px;
+    --focus-time: 0.5s;
     
 }
 
@@ -177,15 +178,13 @@ h1{
         position: fixed;
         aspect-ratio: 595 / 842;
         width: min(992px,54vh);
-        animation: expand 0.5s ease forwards;
+        animation: expand var(--focus-time) ease forwards;
         z-index: 10;
-        background-size: contain;
     }
     .card.card--unfocused, .card.card--onload, #placeholder{
         position: relative;
         width: max(250px,20vh);
         height: max(250px,20vh);
-        /* animation: unexpand 0.5s ease;  */
         z-index: 0;
         left: 0;
         top: 0;
@@ -267,7 +266,7 @@ h1{
     display: flex;
 }
     #canvas-area:not(.hidden){
-        transition: 0.5s ease-in 0.5s;
+        transition: 0.5s ease-in var(--focus-time);
     }
 #canvas{
     --canvas-cursor: url(img/pen-cur.png) 0 128, auto;
