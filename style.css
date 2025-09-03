@@ -25,11 +25,14 @@
     --clr-highlight: #ddd;
     --clr-selected: rgb(66, 51, 36);
 
+    --clr-scrollbar:#888;
+    --clr-scrollbar-hover: #555;
+
     --overlay-opacity: 0.25;
 
     /* other settings */
     --text-outline: rgba(0, 0, 0, 0.8);
-    --sidebar-width: 120px;
+    --sidebar-width: 150px;
     --focus-time: 0.5s;
     
 }
@@ -43,6 +46,29 @@ html{
 body{
     background-color: var(--clr-body-bg);
 }
+
+/* scrollbar styling */
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--clr-scrollbar);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-scrollbar-hover);
+}
+
+
 /* login display styling */
 #login-display{
     position: fixed;
@@ -63,17 +89,21 @@ body{
 
 /* sidebar styling */
 #sidebar {
-    display: grid;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
     background-color: var(--clr-sidebar-bg);
     overflow-x: hidden;
+    overflow-y: scroll;
     padding-top: 20px;
     transition: ease 0.4s;
     justify-content: space-between;
+    min-height: 100vh
+
 }
 #sidebar.sidebar--minimised{
     transform: translateX(-100%);
@@ -99,11 +129,25 @@ body{
     text-align: center;
 }
 
+#sidebar-card-button-container{
+    padding-bottom: 20px;
+}
+#sidebar-tab-container, #sidebar-profile-container, #sidebar-card-button-container{
+    width: 100%;
+}
+
 .tab-button {
+    height: 40px;
+}
+
+.card-button{
+    height: 80px
+}
+.tab-button, .card-button{
     display: block;
     background-color: inherit;
     color: var(--clr-text);
-    padding: 22px 16px;
+    padding: none;
     width: 100%;
     border: none;
     outline: none;
@@ -113,7 +157,7 @@ body{
     font-size: 125%
 }
 /* hover and not selected */
-.tab-button:hover:not(.tab-button--pressed) {
+.tab-button:hover:not(.tab-button--pressed), .card-button:hover {
     background-color: var(--clr-highlight);
 }
 /* selected tab button */

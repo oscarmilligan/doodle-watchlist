@@ -1,12 +1,48 @@
 import {focusCard} from "./focuscard.js"
-import { switchCategory } from "./sidebar.js";
+import { switchCategory, saveCategory, expandSidebar } from "./sidebar.js";
 
 const canvas = document.getElementById("canvas");
 
 
 // other constants
 const root = document.querySelector(":root");
+console.log("ROOT:",root);
+
 window.root = root
+
+function scaleTextToFit(element){
+    console.log("Attempting to scale text for:",element);
+    
+    var width = Number(window.getComputedStyle(root).getPropertyValue("--sidebar-width").slice(0,-2));
+    // var height = Number(window.getComputedStyle(element).height.slice(0,-2));
+    var height = 40
+    if (width != 0) {
+        console.log("Scaling element text for:",element);
+        console.log("before:",element.style.fontSize);
+        
+        const textLen = element.textContent.length;
+
+        console.log("Length of content:",textLen);
+        console.log("Width of container:",width);
+        console.log("Height of container:",height);
+
+        const newSize = `${Math.min(Math.round(width / textLen),height)}`
+
+        console.log("Scaling to: ",newSize);
+        
+        
+        element.style.fontSize = `${newSize}px`;
+        console.log("after:",element.style.fontSize);
+    }
+    else{
+        console.log("Cannot rescale text, width is 0");
+        
+    }
+    
+
+}
+
+
 
 // load category
 function loadCategory(categoryId, categoryName){
@@ -157,7 +193,14 @@ function updateCard(card) {
         console.log("updated card");
     });
 }
-
+function titleInputFunction(input, categoryId){
+    try {
+        const categoryName = input.textContent;
+        saveCategory(categoryId,categoryName);
+    } catch (error) {
+        alert("Could not save image due to",error);
+    }
+}
 function createCategoryElements(categoryId, categoryName){
     // create tab div
     const tab = document.createElement("div");
@@ -168,7 +211,14 @@ function createCategoryElements(categoryId, categoryName){
     const header = document.createElement("h1");
     header.classList.add("category-header");
     header.setAttribute("contenteditable","true");
-    header.textContent = "New Category";
+    header.textContent = categoryName;
+    // add header listener on enter key to save name
+    header.addEventListener('keypress', function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            titleInputFunction(header, categoryId);
+    };
+    });
 
     // create expand button
     const expandBtn = document.createElement("button");
@@ -191,6 +241,8 @@ function createCategoryElements(categoryId, categoryName){
     switchButton.addEventListener("click", () => {
         switchCategory(categoryId,switchButton);
     })
+    switchButton.style.width = window.getComputedStyle(root).getPropertyValue("--sidebar-width")
+    scaleTextToFit(switchButton);
 
     return {tab,header,expandBtn,gallery, switchButton}
 }
@@ -212,6 +264,14 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    // fix sidebar width
+    const baseSidebarWidth = window.getComputedStyle(root).getPropertyValue("--sidebar-width");
+    console.log("Base sidebar width:",baseSidebarWidth);
+    
+    const sidebar = document.getElementById("sidebar");
+    sidebar.style.width = baseSidebarWidth;
+
+    window.baseSidebarWidth = baseSidebarWidth
 
 });
-export {updateCard, createCategoryElements, loadCategory}
+export {updateCard, createCategoryElements, loadCategory, scaleTextToFit}

@@ -1,16 +1,12 @@
 import { focusCard } from "./focuscard.js";
-import { createCategoryElements, loadCategory } from "./main.js";
+import { createCategoryElements, loadCategory, scaleTextToFit } from "./main.js";
 
-const baseSidebarWidth = "120px";
 
 // get element references
 const createButton = document.getElementById("create-button");
 const createCategoryButton = document.getElementById("create-category")
 const SignoutButton = document.getElementById("log-out-button")
 const root = window.root
-// fix sidebar width
-const sidebar = document.getElementById("sidebar");
-sidebar.style.width = baseSidebarWidth;
 
 var sidebarExpanded = true;
 
@@ -21,6 +17,7 @@ var sidebarExpanded = true;
 // })
 
 function expandSidebar(expandButton){
+    const root = window.root
     if (sidebarExpanded) {
             root.style.setProperty('--sidebar-width',"0px");
             expandButton.classList.add("expand-button--minimised");
@@ -29,7 +26,7 @@ function expandSidebar(expandButton){
             sidebarExpanded = false;
         }
         else{
-            root.style.setProperty('--sidebar-width',baseSidebarWidth);
+            root.style.setProperty('--sidebar-width',window.baseSidebarWidth);
             expandButton.classList.remove("expand-button--minimised");
             sidebar.classList.add("sidebar--expanded");
             sidebar.classList.remove("sidebar--minimised");
@@ -70,15 +67,16 @@ function createCard(){
     card.appendChild(titleElement)
 }
 function createNewCategory(){
+    const defaultName = "New Category (press enter to save name)";
     // set create new id as unix time
     const categoryId = Date.now();
     // load cateogry onto page
-    loadCategory(categoryId, "New Category")
+    loadCategory(categoryId, defaultName)
     // switch tab
     const switchButton = document.getElementById(`switch-${categoryId}`);
     switchButton.click();
     // save to db
-    saveCategory(categoryId, "New Category");
+    saveCategory(categoryId, defaultName);
 }
 
 function switchCategory(categoryId, button = null){
@@ -116,6 +114,12 @@ function saveCategory(categoryId, categoryName){
         })
         .then(() => {
             console.log("Category written with ID: ", categoryId);
+            console.log("Category written with name: ", categoryName);
+            // update category buttton
+            const categoryButton = document.getElementById(`switch-${categoryId}`)
+            categoryButton.textContent = categoryName;
+            scaleTextToFit(categoryButton)
+
         })
         .catch((error) => {
             console.error("Error adding category: ", error);
@@ -150,4 +154,4 @@ SignoutButton.addEventListener("click", () => {
     signOut();
 })
 
-export {expandSidebar, switchCategory}
+export {expandSidebar, switchCategory, saveCategory}

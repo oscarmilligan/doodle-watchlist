@@ -26,6 +26,7 @@ const saveButton = document.getElementById("save");
 const downloadButton = document.getElementById("download")
 const closeButton = document.getElementById("close-paint")
 const deleteButton = document.getElementById("delete-button")
+const titleInput = document.getElementById("title-input");
 let isDrawing = false;
 
 //set canvas resolution (a4 72dpi)
@@ -179,7 +180,6 @@ async function saveImage(){ // update to use existing names for images which are
   const categoryId = window.currentCategory;
   
 	let imageLink = canvas.toDataURL("image/png",1);
-  const titleInput = document.getElementById("title-input");
 	console.log("saved image");
 	
   let entryID = canvas.style.getPropertyValue("--entry-id");
@@ -327,7 +327,11 @@ eraserButton.addEventListener("click", () => {
 });
 
 saveButton.addEventListener("click", () => {
-	saveImage();
+	try {
+      saveImage();
+  } catch (error) {
+    alert("Could not save image due to",error);
+  }
 });
 
 
@@ -342,5 +346,17 @@ closeButton.addEventListener("click", () => {
 deleteButton.addEventListener("click", () => {
   deleteCard(card_focused);
 })
+
+// listen for the enter key on title input
+titleInput.addEventListener('keypress', function(e) {
+	if (e.key === "Enter") {
+		e.preventDefault();
+    try {
+      saveImage();
+    } catch (error) {
+      alert("Could not save image due to",error);
+    }
+	}      
+});
 
 export {resize}
