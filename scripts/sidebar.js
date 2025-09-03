@@ -1,5 +1,6 @@
-import { focusCard } from "./focuscard.js";
+import { focusCard, unfocusCard} from "./focuscard.js";
 import { createCategoryElements, loadCategory, scaleTextToFit } from "./main.js";
+
 
 
 // get element references
@@ -81,6 +82,9 @@ function createNewCategory(){
 }
 
 function switchCategory(categoryId, button = null){
+    if (window.card_focused != null) {
+        unfocusCard(window.card_focused)
+    }
     const originalCategory = window.currentCategory;
     window.currentCategory = categoryId;
     if (originalCategory != null){
