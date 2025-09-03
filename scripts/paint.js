@@ -296,7 +296,7 @@ function deleteCard(card){
   // Delete the db entry
   console.log("Deleting db entry...");
   db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${window.currentCategory}`).collection("entries").doc(`${entryId}`).delete().then(() => {
-    console.log("Database entry successfully deleted from:",`users/${window.user.uid}/entries/${entryId}`);
+    console.log("Database entry successfully deleted from:",`users/${window.user.uid}/categories/${window.currentCategory}/entries/${entryId}`);
     
     // Delete the file
     console.log("Deleting file...");

@@ -6,6 +6,7 @@ import { createCategoryElements, loadCategory, scaleTextToFit } from "./main.js"
 const createButton = document.getElementById("create-button");
 const createCategoryButton = document.getElementById("create-category")
 const SignoutButton = document.getElementById("log-out-button")
+const deleteCategoryButton = document.getElementById("delete-category")
 const root = window.root
 
 var sidebarExpanded = true;
@@ -67,7 +68,7 @@ function createCard(){
     card.appendChild(titleElement)
 }
 function createNewCategory(){
-    const defaultName = "New Category (press enter to save name)";
+    const defaultName = "Type here...";
     // set create new id as unix time
     const categoryId = Date.now();
     // load cateogry onto page
@@ -126,6 +127,37 @@ function saveCategory(categoryId, categoryName){
         });
 }
 
+function deleteCategory(categoryId){
+    console.log("Deleting category db entry...");
+    db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${window.currentCategory}`).delete().then(() => {
+        console.log("Database entry successfully deleted from:",`users/${window.user.uid}/categories/${window.currentCategory}`);
+        
+        // delete the ui
+        const tab = document.getElementById(`tab-${categoryId}`);
+        const oldButton = document.getElementById(`switch-${categoryId}`);
+        console.log(tab,oldButton);
+        
+        oldButton.remove();
+        tab.remove();
+        console.log("Deleted button and tab");
+        
+        window.currentCategory = null;
+        // try to switch to new category
+        const buttonContainer = document.getElementById("sidebar-tab-container");
+        const tabButtons = buttonContainer.children
+        if (tabButtons.length >= 1){
+            console.log("Switching to first availible category");
+            tabButtons[0].click();
+        }
+        else{
+            console.log("No category to switch to");
+        }
+
+    }).catch((error) => {
+        console.log("Failed to delete db entry due to:",error);
+    })
+}
+
 function signOut(){
     firebase.auth().signOut().then(() => {
         console.log("User signed out successfully");
@@ -150,8 +182,13 @@ createCategoryButton.addEventListener("click",() => {
     createNewCategory();
 })
 
+deleteCategoryButton.addEventListener("click",() => {
+    deleteCategory(window.currentCategory);
+})
+
 SignoutButton.addEventListener("click", () => {
     signOut();
 })
+
 
 export {expandSidebar, switchCategory, saveCategory}
