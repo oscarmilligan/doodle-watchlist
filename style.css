@@ -23,6 +23,7 @@
 
     --clr-sidebar-bg: #6b533c;
     --clr-highlight: #ddd;
+    --clr-selected: rgb(66, 51, 36);
 
     --overlay-opacity: 0.25;
 
@@ -111,11 +112,16 @@ body{
     transition: 0.3s;
     font-size: 125%
 }
-.tab-button:hover {
+/* hover and not selected */
+.tab-button:hover:not(.tab-button--pressed) {
     background-color: var(--clr-highlight);
 }
-
-#expand-button{
+/* selected tab button */
+.tab-button.tab-button--pressed {
+    background-color: var(--clr-selected);
+    color: var(--clr-text-lighta);
+}
+.expand-button{
     position: fixed;
     left: calc(var(--sidebar-width) + 16px);
     top: 16px;
@@ -130,10 +136,10 @@ body{
     background-color: #00000000;
     transition: ease 0.4s;
 }
-#expand-button:hover{
+.expand-button:hover{
     color: var(--clr-highlight);
 }
-#expand-button.expand-button--minimised{
+.expand-button.expand-button--minimised{
     transform: rotate(180deg);
 }
 
@@ -142,6 +148,7 @@ body{
     margin-left: var(--sidebar-width);
     padding: min(50px, 7%);
 }
+
 
 h1{
     margin: 30px 0;
@@ -158,6 +165,7 @@ h1{
     --entry-image: 0;
     --title: ;
     --rating: ;
+    --category-id: ;
     --image-id: 0;
     --canv-left: 0px;
     --canv-top: 0px;

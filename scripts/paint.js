@@ -176,6 +176,7 @@ function getPixelColor(data,x,y){
 
 async function saveImage(){ // update to use existing names for images which are not new
   const focusedCard = window.card_focused;
+  const categoryId = window.currentCategory;
   
 	let imageLink = canvas.toDataURL("image/png",1);
   const titleInput = document.getElementById("title-input");
@@ -233,7 +234,10 @@ async function saveImage(){ // update to use existing names for images which are
       // Upload completed successfully
       uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
         console.log("File available at", downloadURL);
-        db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${entryID}`).set({
+        console.log("Updating database at",`users/${window.user.uid}/categories/${categoryId}/entries/${entryID}`);
+        
+        
+        db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryID}`).set({
         name: title,
         rating: rating,
         imageId: imageId
