@@ -292,26 +292,28 @@ function deleteCard(card){
   let storageRef = firebase.storage().ref(userPath);
 
   var imageRef = storageRef.child(`images/${imageId}.png`);
-  // Delete the file
-  console.log("Deleting file...");
-  imageRef.delete().then(() => {
-    console.log("File successfully deleted from:",`users/${window.user.uid}/images/${imageId}.png`);
 
-    // Delete the db entry
-    console.log("Deleting db entry...");
-    db.collection(`users`).doc(`${window.user.uid}`).collection(`entries`).doc(`${entryId}`).delete().then(() => {
-      console.log("Database entry successfully deleted from:",`users/${window.user.uid}/entries/${entryId}`);
-      
-      // delete the card
-      unfocusCard(card);
-      card.remove();
+  // Delete the db entry
+  console.log("Deleting db entry...");
+  db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${window.currentCategory}`).collection("entries").doc(`${entryId}`).delete().then(() => {
+    console.log("Database entry successfully deleted from:",`users/${window.user.uid}/entries/${entryId}`);
+    
+    // Delete the file
+    console.log("Deleting file...");
+    imageRef.delete().then(() => {
+      console.log("File successfully deleted from:",`users/${window.user.uid}/images/${imageId}.png`);
 
     }).catch((error) => {
-      console.log("Failed to delete db entry due to:",error);
-    })
+      console.log("Failed to delete file due to:",error);
+    });
+    // delete the card
+    unfocusCard(card);
+    card.remove();
+
   }).catch((error) => {
-    console.log("Failed to delete file due to:",error);
-  });
+    console.log("Failed to delete db entry due to:",error);
+  })
+    
 
   
 }
