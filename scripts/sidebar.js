@@ -150,8 +150,8 @@ function deleteCategory(categoryId){
         const buttonContainer = document.getElementById("sidebar-tab-container");
         const tabButtons = buttonContainer.children
         if (tabButtons.length >= 1){
-            console.log("Switching to first availible category");
-            tabButtons[0].click();
+            console.log("Switching to last availible category");
+            tabButtons[tabButtons.length-1].click();
         }
         else{
             console.log("No category to switch to");
