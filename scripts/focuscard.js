@@ -23,8 +23,11 @@ function focusCard (card){
             image.src = imageDownloadURL.slice(4,-1);
             image.onload = () => {
                 ctx.imageSmoothingEnabled = false;
+                const lastOp = ctx.globalCompositeOperation;
+                ctx.globalCompositeOperation = "source-over";
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(image,0, 0);
+                ctx.globalCompositeOperation = lastOp;
             };
             console.log("Successfully loaded canvas");
         }

@@ -224,6 +224,17 @@ h1{
     background-size: 100% auto;
     
 }
+    .card::after, .card--onload::after{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-size: 100% auto;
+        background-image: url("img/stars.png");
+        background-repeat: no-repeat;
+        content: " ";
+        transform: translateX(-50%);
+
+    }
     .card:hover{
         cursor: pointer;
     }
@@ -326,6 +337,23 @@ h1{
     #canvas-area:not(.hidden){
         transition: 0.5s ease-in var(--focus-time);
     }
+
+#canvas-bg{
+    --canvas-cursor: url(img/pen-cur.png) 0 128, auto;
+    --entry-id: 0;
+    --image-id: 0;
+
+    position: absolute;
+    aspect-ratio: 595 / 842;
+    width: min(992px,54vh);
+    padding: 0;
+    border: 1px solid var(--clr-card-border);
+    border-radius: 10px;
+    z-index: 79;
+    background-color: var(--clr-card-bg);
+    background-image: url(img/stars.png);
+    background-size: contain;
+}
 #canvas{
     --canvas-cursor: url(img/pen-cur.png) 0 128, auto;
     --entry-id: 0;
@@ -338,8 +366,8 @@ h1{
     border: 1px solid var(--clr-card-border);
     border-radius: 10px;
     z-index: 80;
-    background-color: var(--clr-card-bg);
 }
+
 #canvas:hover{
     cursor: var(--canvas-cursor);
 }
