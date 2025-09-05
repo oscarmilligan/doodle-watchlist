@@ -28,6 +28,7 @@ function focusCard (card){
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(image,0, 0);
                 ctx.globalCompositeOperation = lastOp;
+                resize()
             };
             console.log("Successfully loaded canvas");
         }

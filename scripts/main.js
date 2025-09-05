@@ -47,13 +47,13 @@ function scaleTextToFit(element){
 // load category
 function loadCategory(categoryId, categoryName){
     // create html elements
-    const {tab, header, expandBtn, gallery, switchButton} = createCategoryElements(categoryId, categoryName);
+    const {tab, header, expandBtn, watchedGallery, switchButton} = createCategoryElements(categoryId, categoryName);
     // load elements onto doc
     const body = document.getElementById("body");
     body.appendChild(tab);
     tab.appendChild(header);
     tab.appendChild(expandBtn);
-    tab.appendChild(gallery);
+    tab.appendChild(watchedGallery);
     // load switch button
     const buttonContainer = document.getElementById("sidebar-tab-container");
     buttonContainer.appendChild(switchButton);
@@ -86,7 +86,7 @@ function loadCards(uid){
             // load category
             loadCategory(categoryId, categoryName)
 
-            let gallery = document.getElementById(`gal-${categoryId}`)
+            let watchedGallery = document.getElementById(`seen-${categoryId}`)
 
             // load cards
             const entriesRef = categoryRef.doc(`${categoryId}`).collection("entries")
@@ -133,7 +133,7 @@ function loadCards(uid){
 
                     card.appendChild(titleElement)
 
-                    gallery.appendChild(card)
+                    watchedGallery.appendChild(card)
                 }))
                 
             })
@@ -164,8 +164,8 @@ function updateCard(card) {
         let userPath = `users/${uid}`;
         let storageRef = firebase.storage().ref(userPath);
 
-        // create reference to card gallery
-        const gallery = document.getElementById("gallery")
+        // create reference to card watchedGallery
+        const watchedGallery = document.getElementById("watchedGallery")
         
         // load image
         storageRef.child(`/images/${imageId}.png`).getDownloadURL()
@@ -228,10 +228,11 @@ function createCategoryElements(categoryId, categoryName){
         expandSidebar(expandBtn);
     })
 
-    // create gallery element
-    const gallery = document.createElement("div")
-    gallery.classList.add("gallery");
-    gallery.id = `gal-${categoryId}`;
+    // create watchedGallery elements
+    const watchedGallery = document.createElement("div")
+    watchedGallery.classList.add("watchedGallery");
+    watchedGallery.classList.add("gallery");
+    watchedGallery.id = `seen-${categoryId}`;
 
     // create sidebar switch button element
     const switchButton = document.createElement("button")
@@ -244,7 +245,7 @@ function createCategoryElements(categoryId, categoryName){
     switchButton.style.width = window.getComputedStyle(root).getPropertyValue("--sidebar-width")
     scaleTextToFit(switchButton);
 
-    return {tab,header,expandBtn,gallery, switchButton}
+    return {tab,header,expandBtn,watchedGallery, switchButton}
 }
 
 firebase.auth().onAuthStateChanged(user => {

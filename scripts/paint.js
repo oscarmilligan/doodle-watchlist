@@ -51,9 +51,6 @@ function startPosition(e) {
     canvleft = canv_rect.left;
     canvtop = canv_rect.top;
 	
-	//set new width and height in case of dimension change
-	resize();
-	
     isDrawing = true;
     draw(e);
 	
@@ -88,6 +85,7 @@ canvas.addEventListener("mousedown", startPosition);
 canvas.addEventListener("mouseup", endPosition);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseout", endPosition);
+window.addEventListener("resize",resize)
 
 clearCanvas.addEventListener("click", () => {
 		ctx.clearRect(0, 0, canvas.width,canvas.height);
@@ -95,6 +93,7 @@ clearCanvas.addEventListener("click", () => {
 
 // resize function in case of canvas size change
 function resize(){
+  console.log("resizing canvas");
   
   // get canvas dims
   var canv_rect = canvas.getBoundingClientRect();

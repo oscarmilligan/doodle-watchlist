@@ -40,8 +40,8 @@ function createCard(){
     const defaultTitle = "New Entry";
     const defaultRating = 0;
     const categoryId = window.currentCategory;
-    // create reference to card gallery
-    const gallery = document.getElementById(`gal-${categoryId}`)
+    // create reference to card watchedGallery
+    const watchedGallery = document.getElementById(`seen-${categoryId}`)
         
     // create card element
     const card = document.createElement("div");
@@ -58,7 +58,7 @@ function createCard(){
     });
 
     
-    gallery.appendChild(card);
+    watchedGallery.appendChild(card);
     console.log("Created card with id:",cardID);
     console.log("and image id:",imageId);
     // create title span
