@@ -53,8 +53,8 @@ function loadCategory(categoryId, categoryName){
     body.appendChild(tab);
     tab.appendChild(header);
     tab.appendChild(expandBtn);
-    tab.appendChild(watchedGallery);
     tab.appendChild(unwatchedGallery);
+    tab.appendChild(watchedGallery);
     // load switch button
     const buttonContainer = document.getElementById("sidebar-tab-container");
     buttonContainer.appendChild(switchButton);
@@ -73,7 +73,6 @@ function loadCategory(categoryId, categoryName){
 
 // load cards
 function loadCards(uid){    
-    // TODO: Load category buttons, load category pages, load cards on each page
 
     // Get categories from db
     const categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
@@ -87,7 +86,8 @@ function loadCards(uid){
             // load category
             loadCategory(categoryId, categoryName)
 
-            let watchedGallery = document.getElementById(`seen-${categoryId}`)
+            const watchedGallery = document.getElementById(`seen-${categoryId}`)
+            const unwatchedGallery = document.getElementById(`unseen-${categoryId}`)
 
             // load cards
             const entriesRef = categoryRef.doc(`${categoryId}`).collection("entries")
@@ -98,6 +98,7 @@ function loadCards(uid){
                     const imageId = doc.data()["imageId"];
                     const title = doc.data()["name"];
                     const rating = doc.data()["rating"];
+                    const watched = doc.data()["watched"];
 
 
                     let userPath = `users/${uid}`;
@@ -123,6 +124,7 @@ function loadCards(uid){
                     card.style.setProperty("--image-id",imageId)
                     card.style.setProperty("--title",title)
                     card.style.setProperty("--rating",rating)
+                    card.style.setProperty("--watched",watched)
                     card.style.setProperty("--category-id",categoryId)
                     card.addEventListener("click",() => {
                         focusCard(card);
@@ -134,7 +136,14 @@ function loadCards(uid){
 
                     card.appendChild(titleElement)
 
-                    watchedGallery.appendChild(card)
+                    //add to appropriate gallery
+                    if (watched){
+                        watchedGallery.appendChild(card)
+                    }
+                    else{
+                        unwatchedGallery.appendChild(card)
+                    }
+        
                 }))
                 
             })
@@ -148,25 +157,34 @@ function updateCard(card) {
     
     const uid= window.user.uid;
     const entryId = card.style.getPropertyValue("--entry-id");
+    const categoryId = window.currentCategory
     console.log("Updating card with entryID",entryId,"at",`users/${uid}/entries/${entryId}`);
     
-    db.collection(`users`).doc(`${uid}`).collection(`categories`).doc(`${window.currentCategory}`).collection("entries").doc(`${entryId}`).get().then((doc) => {
+    db.collection(`users`).doc(`${uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryId}`).get().then((doc) => {
         console.log("retrieved doc reference");
         
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
 
-        // save doc data
+        // load doc data
         const imageId = doc.data()["imageId"]
         const title = doc.data()["name"]
         const rating = doc.data()["rating"]
+        const watched = doc.data()["watched"]
 
         // get storage reference
         let userPath = `users/${uid}`;
         let storageRef = firebase.storage().ref(userPath);
 
-        // create reference to card watchedGallery
-        const watchedGallery = document.getElementById("watchedGallery")
+        //move to appropriate gallery
+        if (watched){
+            const watchedGallery = document.getElementById(`seen-${categoryId}`)
+            watchedGallery.appendChild(card)
+        }
+        else{
+            const unwatchedGallery = document.getElementById(`unseen-${categoryId}`)
+            unwatchedGallery.appendChild(card)
+        }
         
         // load image
         storageRef.child(`/images/${imageId}.png`).getDownloadURL()
@@ -190,7 +208,8 @@ function updateCard(card) {
         // set other card properties 
         card.style.setProperty("--title",title);
         card.style.setProperty("--rating",rating);
-        
+        card.style.setProperty("--watched", watched);
+
         console.log("updated card");
     });
 }

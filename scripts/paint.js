@@ -19,6 +19,8 @@ const eraserImg = "url(img/eraser.png)";
 const eraserCur = "url(img/eraser-cur.png) 0 128, auto";
 
 // get html reference
+const canvasBackground = document.getElementById("canvas-bg")
+const watchedCheckbox = document.getElementById("watched-checkbox");
 const brushSize = document.getElementById("brush-size");
 const colorPicker =document.getElementById("color-picker");
 const clearCanvas = document.getElementById("clear-canvas");
@@ -183,6 +185,10 @@ async function saveImage(){ // update to use existing names for images which are
 	
   let entryID = canvas.style.getPropertyValue("--entry-id");
   let imageId = canvas.style.getPropertyValue("--image-id");
+  let watched = watchedCheckbox.checked;
+  console.log("Setting watched to:",watched);
+  
+  window.card_focused.style.setProperty("--watched",watched)
   let title = titleInput.textContent;
   let rating = window.card_focused.style.getPropertyValue("--rating");
 
@@ -239,7 +245,8 @@ async function saveImage(){ // update to use existing names for images which are
         db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryID}`).set({
         name: title,
         rating: rating,
-        imageId: imageId
+        imageId: imageId,
+        watched: watched,
         })
         .then(() => {
             console.log("Document written with ID: ", entryID);
@@ -312,9 +319,15 @@ function deleteCard(card){
   }).catch((error) => {
     console.log("Failed to delete db entry due to:",error);
   })
-    
+}
 
-  
+function updateCanvasBackground(){
+  if (watchedCheckbox.checked && !canvasBackground.classList.contains("watched-canvas")){
+    canvasBackground.classList.add("watched-canvas")
+  }
+  if (!watchedCheckbox.checked && canvasBackground.classList.contains("watched-canvas")){
+    canvasBackground.classList.remove("watched-canvas")
+  }
 }
 
 penButton.addEventListener("click", () => {
@@ -345,6 +358,8 @@ closeButton.addEventListener("click", () => {
 deleteButton.addEventListener("click", () => {
   deleteCard(card_focused);
 })
+
+watchedCheckbox.addEventListener("click", updateCanvasBackground)
 
 // listen for the enter key on title input
 titleInput.addEventListener('keypress', function(e) {

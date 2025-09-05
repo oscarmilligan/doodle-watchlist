@@ -11,8 +11,10 @@ function focusCard (card){
         // get  context reference
         const ctx = canvas.getContext("2d");
         const titleInput = document.getElementById("title-input");
+        const watchedCheckbox = document.getElementById("watched-checkbox");
         const imageDownloadURL = card.style.getPropertyValue("--entry-image");
         const title = card.style.getPropertyValue("--title");
+        const watched = card.style.getPropertyValue("--watched")
         console.log("Drawing on canvas:",imageDownloadURL);
         
         if (imageDownloadURL != "") {
@@ -41,7 +43,11 @@ function focusCard (card){
         //update canvas title
         titleInput.textContent = title;
         console.log("canvas title updated to:",title);
-        
+        // update canvas watched checkbox
+        if (`${watchedCheckbox.checked}` != watched){
+            watchedCheckbox.click();
+            console.log("canvas watched updated to:",watched);
+        }
 
         // get card position
         const leftpos = card.offsetLeft;
@@ -54,7 +60,6 @@ function focusCard (card){
         var canv_rect = canvas.getBoundingClientRect();
         const canvleft = canv_rect.left;
         const canvtop = canv_rect.top;
-        // console.log(canvleft,canvtop);
         
 
         canvas.style.setProperty("--entry-id",card.style.getPropertyValue("--entry-id"));

@@ -39,10 +39,16 @@ function expandSidebar(expandButton){
 function createCard(){
     const defaultTitle = "New Entry";
     const defaultRating = 0;
+    const defaultWatched = false;
     const categoryId = window.currentCategory;
-    // create reference to card watchedGallery
-    const watchedGallery = document.getElementById(`seen-${categoryId}`)
-        
+    // create reference to card gallery
+
+    if (defaultWatched){
+        var gallery = document.getElementById(`seen-${categoryId}`)
+    }
+    else{
+        var gallery = document.getElementById(`unseen-${categoryId}`)
+    }
     // create card element
     const card = document.createElement("div");
     card.classList.add("card","card--onload");
@@ -52,13 +58,14 @@ function createCard(){
     card.style.setProperty("--image-id",imageId);
     card.style.setProperty("--title",defaultTitle);
     card.style.setProperty("--rating",defaultRating);
+    card.style.setProperty("--watched",defaultWatched);
     // card.style.setProperty("--entry-image","url("+"img/stars.png"+")")
     card.addEventListener("click",() => {
         focusCard(card);
     });
 
     
-    watchedGallery.appendChild(card);
+    gallery.appendChild(card);
     console.log("Created card with id:",cardID);
     console.log("and image id:",imageId);
     // create title span

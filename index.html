@@ -62,9 +62,11 @@
 
             </div>
             <div id="paint-tools">
+                <input type="checkbox" id="watched-checkbox" class="paint-tool">
                 <input type="range"
                     id="brush-size" min="1"
                     max="50" value="5" class="paint-tool">
+                <span id="brush-size-label"></span>
                 <input type="color"
                     id="color-picker" class="paint-tool">
                 <button id="pen" class="paint-tool">
@@ -85,6 +87,7 @@
                 <button id="delete-button" class="paint-tool">
                     Delete
                 </button>
+                
             </div>
         </div>
         <a id="close-paint" class="close"></a>
