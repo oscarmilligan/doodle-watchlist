@@ -47,13 +47,14 @@ function scaleTextToFit(element){
 // load category
 function loadCategory(categoryId, categoryName){
     // create html elements
-    const {tab, header, expandBtn, watchedGallery, switchButton} = createCategoryElements(categoryId, categoryName);
+    const {tab, header, expandBtn, watchedGallery,unwatchedGallery, switchButton} = createCategoryElements(categoryId, categoryName);
     // load elements onto doc
     const body = document.getElementById("body");
     body.appendChild(tab);
     tab.appendChild(header);
     tab.appendChild(expandBtn);
     tab.appendChild(watchedGallery);
+    tab.appendChild(unwatchedGallery);
     // load switch button
     const buttonContainer = document.getElementById("sidebar-tab-container");
     buttonContainer.appendChild(switchButton);
@@ -228,11 +229,16 @@ function createCategoryElements(categoryId, categoryName){
         expandSidebar(expandBtn);
     })
 
-    // create watchedGallery elements
+    // create gallery elements
     const watchedGallery = document.createElement("div")
     watchedGallery.classList.add("watchedGallery");
     watchedGallery.classList.add("gallery");
     watchedGallery.id = `seen-${categoryId}`;
+
+    const unwatchedGallery = document.createElement("div")
+    unwatchedGallery.classList.add("unwatchedGallery");
+    unwatchedGallery.classList.add("gallery");
+    unwatchedGallery.id = `unseen-${categoryId}`;
 
     // create sidebar switch button element
     const switchButton = document.createElement("button")
@@ -245,7 +251,7 @@ function createCategoryElements(categoryId, categoryName){
     switchButton.style.width = window.getComputedStyle(root).getPropertyValue("--sidebar-width")
     scaleTextToFit(switchButton);
 
-    return {tab,header,expandBtn,watchedGallery, switchButton}
+    return {tab,header,expandBtn,watchedGallery,unwatchedGallery, switchButton}
 }
 
 firebase.auth().onAuthStateChanged(user => {
