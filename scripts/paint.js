@@ -18,6 +18,7 @@ const penCur = "url(img/pen-cur.png) 0 128, auto";
 const eraserImg = "url(img/eraser.png)";
 const eraserCur = "url(img/eraser-cur.png) 0 128, auto";
 
+
 // get html reference
 const canvasBackground = document.getElementById("canvas-bg")
 const watchedCheckbox = document.getElementById("watched-checkbox");
@@ -171,9 +172,67 @@ function dataURItoBlob(dataURI) {
 
 }
 
-function getPixelColor(data,x,y){
+function getPixelAlpha(pixels,x,y){
   var i = 4*(x+w*y); // 
-  var color = (pixels[i]<<24) + (pixels[i+1]<<16) + (pixels[i+2]<<8) + (pixels[i+3]); // I don't care about the alpha
+  return pixels[i+3]
+}
+
+function getFractionFilled(imageData, maskData, minAlpha){
+  let filled = 0
+  let total = 0
+  
+  // const test = (number) => number>0;
+  // console.log(imageData.findIndex(test));
+
+  for (let n = 0; n < imageData.length/4; n++) {
+    let i = n * 4 + 3
+    const maskAlpha = maskData[i]
+    if(maskAlpha == 0){
+      continue;
+    } 
+    total += 1
+    const imageAlpha = imageData[i]
+    if(imageAlpha > minAlpha && maskAlpha == 255){
+      filled += 1
+    }
+  }
+  return filled/total
+}
+async function getMaskData(maskUrl){
+  return new Promise((resolve, reject) => {
+
+    const maskImage = new Image()
+    maskImage.src = maskUrl
+    maskImage.onload = () => {
+
+      var maskCanvas = document.createElement('canvas');
+      maskCanvas.width = canvas.width;
+      maskCanvas.height = canvas.height;
+      var maskCtx = maskCanvas.getContext('2d');
+      maskCtx.drawImage(maskImage, 0, 0);
+
+      const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data
+      resolve(maskData)
+    };
+    
+    maskImage.onerror = (err) => reject(err);
+  })
+}
+async function getRating(imageData,minRatingFraction = 0.5, minAlpha = 30){
+  var rating = 0;
+  for (let i = 0; i < 10; i++) {
+    const maskUrl = `./img/stars-mask${i+1}.png`;
+    const maskData = await getMaskData(maskUrl);
+    console.log("Mask data:",maskData);
+    
+    const frac = getFractionFilled(imageData, maskData, minAlpha);
+    console.log("Fraction of half-star filled:",frac);
+
+    if (frac >= minRatingFraction){
+      rating += 1;
+    }
+  }
+  return rating/2
 }
 
 async function saveImage(){ // update to use existing names for images which are not new
@@ -182,27 +241,35 @@ async function saveImage(){ // update to use existing names for images which are
   
 	let imageLink = canvas.toDataURL("image/png",1);
 	console.log("saved image");
-	
+  
   let entryID = canvas.style.getPropertyValue("--entry-id");
   let imageId = canvas.style.getPropertyValue("--image-id");
   let watched = watchedCheckbox.checked;
   console.log("Setting watched to:",watched);
   
   window.card_focused.style.setProperty("--watched",watched)
+  let rating = 0 // default value
   let title = titleInput.textContent;
-  let rating = window.card_focused.style.getPropertyValue("--rating");
-
 	let imagePath = `users/${user.uid}/images/${imageId}.png`;
-
 	let storageRef = firebase.storage().ref(imagePath);
-
 	let imageBlob = dataURItoBlob(imageLink);
-
 	let metadata = {"contentType":"image/png",}
-
 	console.log(imageBlob.size);
 	
+  // update rating for watched entries
+  console.log("Watched?:",watched);
+  if(watched){
+    console.log("updating rating variable");
+    const imageData = ctx.getImageData(0,0,canvas.width,canvas.height).data
+    console.log("Image data:",imageData);
+    
+    rating = await getRating(imageData,0.5,50)
+    window.card_focused.style.setProperty("--rating",rating);
+    console.log("Card rating:",rating);
+    
+  }
 	
+
   // upload debug info
   console.log("---- Upload Debug Info ----");
   console.log("Auth UID:", window.user.uid);
