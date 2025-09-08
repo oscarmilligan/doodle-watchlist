@@ -223,7 +223,6 @@ async function getRating(imageData,minRatingFraction = 0.5, minAlpha = 30){
   for (let i = 0; i < 10; i++) {
     const maskUrl = `./img/stars-mask${i+1}.png`;
     const maskData = await getMaskData(maskUrl);
-    console.log("Mask data:",maskData);
     
     const frac = getFractionFilled(imageData, maskData, minAlpha);
     console.log("Fraction of half-star filled:",frac);
