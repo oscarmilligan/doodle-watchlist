@@ -115,7 +115,7 @@ body{
 }
 
 
-#sidebar a {
+#sidebar a, #sidebar span{
     padding: 0 0 10px 0;
     text-decoration: none;
     font-size: 100%;
@@ -128,6 +128,9 @@ body{
 
 #sidebar-profile-container {
     text-align: center;
+}
+#log-out-button:hover{
+    cursor: pointer;
 }
 
 #sidebar-card-button-container{

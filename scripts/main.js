@@ -305,8 +305,10 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("Signed in user:", user.email);
     console.log("User id:", user.uid);
     console.log("Providers:", user.providerData.map(p => p.providerId));
-    const loginDisplay=document.getElementById("login-display");
+    const loginDisplay = document.getElementById("login-display");
     loginDisplay.style.display = "none";
+    const usernameDisplay = document.getElementById("username-display");
+    usernameDisplay.textContent = user.email
     window.user = user
     window.currentCategory = null
     loadAll(user.uid)
