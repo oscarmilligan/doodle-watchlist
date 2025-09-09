@@ -136,6 +136,18 @@ body{
 #sidebar-tab-container, #sidebar-profile-container, #sidebar-card-button-container{
     width: 100%;
 }
+.search-box{
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: var(--clr-text-light);
+    background-color: var(--clr-sidebar-bg);
+    padding: 5px 5px;
+    border-radius: 0 0 0 10px;}
+#sort-input{
+    background-color: var(--clr-tool-hover);
+}
 
 .tab-button {
     height: 60px;

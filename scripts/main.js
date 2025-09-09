@@ -2,6 +2,7 @@ import {focusCard} from "./focuscard.js"
 import { switchCategory, saveCategory, expandSidebar } from "./sidebar.js";
 
 const canvas = document.getElementById("canvas");
+const sortInput = document.getElementById("sort-input")
 
 
 // other constants
@@ -70,85 +71,110 @@ function loadCategory(categoryId, categoryName){
 
 }
 
+function loadCategoryEntries(uid, categoryId, orderField = "name_lower",order = "asc"){
+    const watchedGallery = document.getElementById(`seen-${categoryId}`);
+    const unwatchedGallery = document.getElementById(`unseen-${categoryId}`);
+
+    // load cards
+    var categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`);
+    var entriesRef = categoryRef.doc(`${categoryId}`).collection("entries").orderBy(orderField,order)
+    if (orderField != "name_lower"){
+        entriesRef = entriesRef.orderBy("name_lower") // add name as secondary order field
+    }
+    entriesRef.get().then((querySnapshot) => {
+        querySnapshot.forEach((doc => {
+            console.log("Card entry:",doc.id, " => ", doc.data());
+            // get entry image reference
+            const imageId = doc.data()["imageId"];
+            const title = doc.data()["name"];
+            const rating = doc.data()["rating"];
+            const watched = doc.data()["watched"];
+
+
+            let userPath = `users/${uid}`;
+            let storageRef = firebase.storage().ref(userPath);
+            
+            // create card element
+            const card = document.createElement("div");
+            card.classList.add("card","card--onload");
+            
+            // load image
+            storageRef.child(`/images/${imageId}.png`).getDownloadURL()
+            .then((url) => {
+                card.style.setProperty("--entry-image","url("+url+")")
+            })
+            .catch((error) => {
+                // Handle any errors
+                console.log(error);
+                
+            });
+
+            //set card properties
+            card.style.setProperty("--entry-id",doc.id)
+            card.style.setProperty("--image-id",imageId)
+            card.style.setProperty("--title",title)
+            card.style.setProperty("--rating",rating)
+            card.style.setProperty("--watched",watched)
+            card.style.setProperty("--category-id",categoryId)
+            card.addEventListener("click",() => {
+                focusCard(card);
+            });
+            // create title span
+            const titleElement = document.createElement("span");
+            titleElement.textContent = title;
+            titleElement.classList.add("title");
+
+            card.appendChild(titleElement)
+
+            //add to appropriate gallery
+            if (watched){
+                watchedGallery.appendChild(card)
+            }
+            else{
+                unwatchedGallery.appendChild(card)
+            }
+
+        }))
+        
+    })
+}
 
 // load cards
-function loadCards(uid){    
+function loadAll(uid, orderField = "name_lower",order = "asc"){    
 
     // Get categories from db
     const categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
     categoryRef.get().then((querySnapshot) => {
         
-        // console.log(querySnapshot);
         querySnapshot.forEach((doc) => {
             console.log("Category:",doc.id, " => ", doc.data());
             const categoryId = doc.id
             const categoryName = doc.data()["name"]
             // load category
             loadCategory(categoryId, categoryName)
-
-            const watchedGallery = document.getElementById(`seen-${categoryId}`)
-            const unwatchedGallery = document.getElementById(`unseen-${categoryId}`)
-
-            // load cards
-            const entriesRef = categoryRef.doc(`${categoryId}`).collection("entries")
-            entriesRef.get().then((querySnapshot) => {
-                querySnapshot.forEach((doc => {
-                    console.log("Card entry:",doc.id, " => ", doc.data());
-                    // get entry image reference
-                    const imageId = doc.data()["imageId"];
-                    const title = doc.data()["name"];
-                    const rating = doc.data()["rating"];
-                    const watched = doc.data()["watched"];
-
-
-                    let userPath = `users/${uid}`;
-                    let storageRef = firebase.storage().ref(userPath);
-                    
-                    // create card element
-                    const card = document.createElement("div");
-                    card.classList.add("card","card--onload");
-                    
-                    // load image
-                    storageRef.child(`/images/${imageId}.png`).getDownloadURL()
-                    .then((url) => {
-                        card.style.setProperty("--entry-image","url("+url+")")
-                    })
-                    .catch((error) => {
-                        // Handle any errors
-                        console.log(error);
-                        
-                    });
-
-                    //set card properties
-                    card.style.setProperty("--entry-id",doc.id)
-                    card.style.setProperty("--image-id",imageId)
-                    card.style.setProperty("--title",title)
-                    card.style.setProperty("--rating",rating)
-                    card.style.setProperty("--watched",watched)
-                    card.style.setProperty("--category-id",categoryId)
-                    card.addEventListener("click",() => {
-                        focusCard(card);
-                    });
-                    // create title span
-                    const titleElement = document.createElement("span");
-                    titleElement.textContent = title;
-                    titleElement.classList.add("title");
-
-                    card.appendChild(titleElement)
-
-                    //add to appropriate gallery
-                    if (watched){
-                        watchedGallery.appendChild(card)
-                    }
-                    else{
-                        unwatchedGallery.appendChild(card)
-                    }
-        
-                }))
-                
-            })
+            loadCategoryEntries(uid,categoryId, orderField, order)
+            
         });
     });
+}
+
+
+
+function sortCategory(categoryId, orderField, order = "asc"){
+    console.log(orderField);
+    
+    // clear galleries
+    const seen = document.getElementById(`seen-${categoryId}`)
+    const unseen = document.getElementById(`unseen-${categoryId}`)
+    
+    for(let gallery of [seen, unseen]){
+        while (gallery.firstChild) {
+            gallery.removeChild(gallery.lastChild);
+        }
+    }
+
+    // load category
+    loadCategoryEntries(window.user.uid, categoryId, orderField, order)
 }
 
 // function to update rendering of a single card
@@ -229,6 +255,7 @@ function createCategoryElements(categoryId, categoryName){
 
     // create header element
     const header = document.createElement("h1");
+    header.id = `head-${categoryId}`
     header.classList.add("category-header");
     header.setAttribute("contenteditable","true");
     header.textContent = categoryName;
@@ -282,12 +309,16 @@ firebase.auth().onAuthStateChanged(user => {
     loginDisplay.style.display = "none";
     window.user = user
     window.currentCategory = null
-    loadCards(user.uid)
+    loadAll(user.uid)
     
   } else {
     console.log("No user signed in");
   }
 });
+
+sortInput.addEventListener("change",() => {
+    sortCategory(window.currentCategory, sortInput.value, "asc")
+})
 
 document.addEventListener("DOMContentLoaded", () => {
     // fix sidebar width

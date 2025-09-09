@@ -249,6 +249,7 @@ async function saveImage(){ // update to use existing names for images which are
   window.card_focused.style.setProperty("--watched",watched)
   let rating = 0 // default value
   let title = titleInput.textContent;
+  let title_lower = title.toLowerCase();
 	let imagePath = `users/${user.uid}/images/${imageId}.png`;
 	let storageRef = firebase.storage().ref(imagePath);
 	let imageBlob = dataURItoBlob(imageLink);
@@ -310,6 +311,7 @@ async function saveImage(){ // update to use existing names for images which are
         
         db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryID}`).set({
         name: title,
+        name_lower: title_lower,
         rating: rating,
         imageId: imageId,
         watched: watched,
