@@ -70,7 +70,7 @@ body{
 
 
 /* login display styling */
-#login-display{
+#login-display, .focused-background{
     position: fixed;
     width: 100%;
     height: 100%;
@@ -78,7 +78,7 @@ body{
     z-index: 98;
 }
 
-#login-box{
+#login-box, .center-focus-box{
     position: fixed;
     left: 50%;
     top: 50%;
@@ -185,7 +185,7 @@ body{
 /* selected tab button */
 .tab-button.tab-button--pressed {
     background-color: var(--clr-selected);
-    color: var(--clr-text-lighta);
+    color: var(--clr-text-light);
 }
 .expand-button{
     position: fixed;
@@ -486,15 +486,65 @@ h1{
         outline: none;
     }
 
+/* group switch menu */
+#group-switch-menu{
+    display: grid;
+    grid-template-areas:
+    "header header"
+    "text input"
+    "footer footer";
+    min-width: none;
+    padding: 10px 0;
+    gap: 10px;
+}
+
+#group-switch-menu span{
+    display: inline;
+    grid-area: text;
+}
+
+#group-switch-menu input{
+    display: inline;
+    grid-area: input;
+}
+#submit-group-id{
+    display: inline;
+    grid-area: footer;
+    width: fit-content;
+    justify-self: center;
+}
+#submit-group-id{
+    display: block;
+    background-color: inherit;
+    color: var(--clr-text);
+    padding: none;
+    border-color: #0c0b07;
+    border-width: 1px;
+    border-style: solid;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 125%
+    
+}
+/* hover and not selected */
+#submit-group-id:hover{
+    background-color: var(--clr-highlight);
+}
+/* selected tab button */
+#submit-group-id:focus {
+    background-color: var(--clr-selected);
+    color: var(--clr-text-light);
+}
 /* misc buttons */
 .close {
   position: absolute;
-  right: 16px;
-  top: 16px;
-  width: 5%;
-  height: 5%;
+  right: min(2.5%,16px);
+  top: min(2.5%,16px);
+  aspect-ratio: 1;
+  width: min(5%,32px);
   max-width: 32px;
-  max-height: 32px;
   opacity: 0.3;
   cursor: pointer;
 }

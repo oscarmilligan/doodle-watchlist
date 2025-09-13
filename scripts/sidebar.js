@@ -8,6 +8,9 @@ const createButton = document.getElementById("create-button");
 const createCategoryButton = document.getElementById("create-category")
 const SignoutButton = document.getElementById("log-out-button")
 const deleteCategoryButton = document.getElementById("delete-category")
+const groupMenuOpenButton = document.getElementById("group-button")
+const groupMenuContainer = document.getElementById("group-menu-container")
+const groupMenuCloseButton = document.getElementById("group-menu-close-button")
 const root = window.root
 
 var sidebarExpanded = true;
@@ -203,6 +206,14 @@ deleteCategoryButton.addEventListener("click",() => {
 
 SignoutButton.addEventListener("click", () => {
     signOut();
+})
+
+groupMenuOpenButton.addEventListener("click", () => {
+    groupMenuContainer.classList.remove("hidden");
+})
+
+groupMenuCloseButton.addEventListener("click", () => {
+    groupMenuContainer.classList.add("hidden");
 })
 
 
