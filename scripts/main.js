@@ -11,23 +11,36 @@ console.log("ROOT:",root);
 
 window.root = root
 
-function scaleTextToFit(element){
+function scaleTextToFit(element, getTextContentFromChildren = false, width=-1, height=-1){
     console.log("Attempting to scale text for:",element);
     
-    var width = Number(window.getComputedStyle(root).getPropertyValue("--sidebar-width").slice(0,-2));
-    // var height = Number(window.getComputedStyle(element).height.slice(0,-2));
-    var height = 40
+    // default width to be sidebar width
+    if (width == -1){
+        width = Number(window.getComputedStyle(root).getPropertyValue("--sidebar-width").slice(0,-2));
+    }
+    if(height == -1){
+        height = 40;
+    }
+
+
     if (width != 0) {
         console.log("Scaling element text for:",element);
         console.log("before:",element.style.fontSize);
-        
-        const textLen = element.textContent.length;
+        var textContent = element.textContent
+        if(getTextContentFromChildren){
+            for (const child of element.children) {
+                textContent += child.textContent
+            }
+        }
+        const textLen = textContent.length;
 
+        console.log("Text content:",textContent);
+        
         console.log("Length of content:",textLen);
         console.log("Width of container:",width);
         console.log("Height of container:",height);
 
-        const newSize = `${Math.min(Math.round(width / textLen),height)}`
+        const newSize = `${Math.min(Math.round((width)/ textLen)+3,height)}`
 
         console.log("Scaling to: ",newSize);
         
@@ -300,6 +313,17 @@ function createCategoryElements(categoryId, categoryName){
     return {tab,header,expandBtn,watchedGallery,unwatchedGallery, switchButton}
 }
 
+function scaleUserUIElements(){
+    const sidebarWidth = Number(window.getComputedStyle(root).getPropertyValue("--sidebar-width").slice(0,-2));
+
+    const usernameDisplay = document.getElementById("username-display");
+    const groupIDText = document.getElementById("group-id-text")
+    const groupButtonGroupID = document.getElementById("group-button-group-id")
+    const groupButton = document.getElementById("group-button")
+    scaleTextToFit(usernameDisplay)
+    scaleTextToFit(groupButton,false)
+}
+
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log("Signed in user:", user.email);
@@ -309,8 +333,14 @@ firebase.auth().onAuthStateChanged(user => {
     loginDisplay.style.display = "none";
     const usernameDisplay = document.getElementById("username-display");
     usernameDisplay.textContent = user.email
+
     window.user = user
     window.currentCategory = null
+    
+    // fix some element text scaling
+    scaleUserUIElements()
+
+
     loadAll(user.uid)
     
   } else {
@@ -326,6 +356,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // fix sidebar width
     const baseSidebarWidth = window.getComputedStyle(root).getPropertyValue("--sidebar-width");
     console.log("Base sidebar width:",baseSidebarWidth);
+
+    // fix some element text scaling
+    scaleUserUIElements()
     
     const sidebar = document.getElementById("sidebar");
     sidebar.style.width = baseSidebarWidth;

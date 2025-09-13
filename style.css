@@ -137,8 +137,13 @@ body{
     padding-bottom: 20px;
 }
 #sidebar-tab-container, #sidebar-profile-container, #sidebar-card-button-container{
+    position: relative;
     width: 100%;
 }
+#group-button span{
+    display: inline;
+}
+
 .search-box{
     display: block;
     position: fixed;
