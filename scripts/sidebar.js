@@ -144,15 +144,7 @@ function deleteCategory(categoryId){
         console.log("Database entry successfully deleted from:",`users/${window.user.uid}/categories/${window.currentCategory}`);
         
         // delete the ui
-        const tab = document.getElementById(`tab-${categoryId}`);
-        const oldButton = document.getElementById(`switch-${categoryId}`);
-        console.log(tab,oldButton);
-        
-        oldButton.remove();
-        tab.remove();
-        console.log("Deleted button and tab");
-        
-        window.currentCategory = null;
+        removeCategoryFromDOM(categoryId)
         // try to switch to new category
         const buttonContainer = document.getElementById("sidebar-tab-container");
         const tabButtons = buttonContainer.children
@@ -169,12 +161,24 @@ function deleteCategory(categoryId){
     })
 }
 
+function removeCategoryFromDOM(categoryId){
+    const tab = document.getElementById(`tab-${categoryId}`);
+    const oldButton = document.getElementById(`switch-${categoryId}`);
+    console.log(tab,oldButton);
+    
+    oldButton.remove();
+    tab.remove();
+    console.log("Deleted button and tab");
+    
+    window.currentCategory = null;
+}
+
 function signOut(){
     firebase.auth().signOut().then(() => {
         console.log("User signed out successfully");
-        const cards = document.getElementsByClassName("card")
-        for (let i = cards.length-1; i >= 0; i--){
-            cards[i].remove()
+        const categories = document.getElementsByClassName("main")
+        for (let i = categories.length-1; i >= 0; i--){
+            removeCategoryFromDOM(categories[i].id.slice(4))
         }
         const loginDisplay=document.getElementById("login-display");
         loginDisplay.style.display = "block";
