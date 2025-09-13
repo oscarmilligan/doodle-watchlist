@@ -122,16 +122,17 @@ body{
     color: var(--clr-text-light);
     display: block;
 }
-#sidebar a:hover {
+#sidebar a:hover, #sidebar a:hover *{
     color: var(--clr-text-lighter);
 }
 
 #sidebar-profile-container {
     text-align: center;
 }
-#log-out-button:hover{
+#log-out-button:hover, #group-button:hover{
     cursor: pointer;
 }
+
 
 #sidebar-card-button-container{
     padding-bottom: 20px;
