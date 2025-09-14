@@ -3,7 +3,7 @@ import { switchCategory, saveCategory, expandSidebar } from "./sidebar.js";
 
 const canvas = document.getElementById("canvas");
 const sortInput = document.getElementById("sort-input")
-const createGroupButton = document.getElementById("submit-group-id")
+const createGroupButton = document.getElementById("create-group-button")
 
 
 // other constants
@@ -154,8 +154,7 @@ function loadCategoryEntries(uid, categoryId, orderField = "name_lower",order = 
 }
 
 // load cards
-function loadAll(uid, orderField = "name_lower",order = "asc"){    
-
+function loadAllCategories(uid, orderField = "name_lower",order = "asc"){    
     // Get categories from db
     const categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
     categoryRef.get().then((querySnapshot) => {
@@ -397,6 +396,58 @@ function saveActiveUserInfo(userGroupPermissions){
         });
 }
 
+function groupSelectClick(groupListItem, groupId){
+    const groupSelectList = document.getElementById("group-select-list")
+
+    // clear any selected grouop
+    for (const li of groupSelectList.children) {
+        if(li.classList.contains("group-select-list-item--selected")){
+            li.classList.remove("group-select-list-item--selected")
+        }
+    }
+
+    // update ui
+    groupListItem.classList.add("group-select-list-item--selected")
+
+    // TODO:
+}
+
+async function loadGroupSelectButtons(){
+    const groupSelectList = document.getElementById("group-select-list")
+
+    // clear existing list items
+    while (groupSelectList.firstChild){
+        groupSelectList.removeChild(groupSelectList.lastChild);
+    }
+    
+
+    const {email, userPermissions} = await loadActiveUserInfo()
+    console.log("userPermissions:",userPermissions);
+    
+    for (const [groupId, permissions] of Object.entries(userPermissions)) {
+        const groupItem = document.createElement("li")
+        groupItem.classList.add("group-select-list-item")
+
+        const groupNameElement = document.createElement("span")
+        groupNameElement.classList.add("group-select-name")
+        groupNameElement.textContent = permissions["groupName"]
+
+        const groupRoleElement = document.createElement("span")
+        groupRoleElement.classList.add("group-select-role")
+        groupRoleElement.textContent = permissions["permission"]
+
+        groupItem.appendChild(groupNameElement)
+        groupItem.appendChild(groupRoleElement)
+
+        groupItem.addEventListener("click",() => {
+            groupSelectClick(groupItem, groupId)
+        })
+
+        groupSelectList.appendChild(groupItem)
+    }
+}
+
+
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log("Signed in user:", user.email);
@@ -414,7 +465,8 @@ firebase.auth().onAuthStateChanged(user => {
     scaleUserUIElements()
 
 
-    loadAll(user.uid)
+    loadAllCategories(user.uid)
+    loadGroupSelectButtons()
     
   } else {
     console.log("No user signed in");
