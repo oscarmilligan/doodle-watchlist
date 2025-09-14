@@ -102,11 +102,41 @@
         </div>
         <a id="close-paint" class="close"></a>
     </div>
+
     <div id="group-menu-container" class="focused-background hidden">
         <div id="group-switch-menu" class="center-focus-box">
+            <h2 id="group-switch-menu-header">Create Group</h2>
             <span>Group ID:</span><input id="group-id-input" type="text">
-            <button id="submit-group-id">Go</button>
+            <div id="group-add-button-container">
+                <button id="create-group-button">Create Group</button>
+                <button id="select-group-menu-button">Back</button>
+            </div>
             <a id="group-menu-close-button" class="close"></a>
+        </div>
+    </div>
+
+    <div id="group-select-container" class="focused-background hidden">
+        <div id="group-select-menu" class="center-focus-box">
+            <h2 id="group-select-header">Group Select</h2>
+            <ul id="group-select-list">
+                <li class="group-select-list-item">
+                    <span class="group-select-name">Group 1:</span>
+                    <span class="group-select-role">Owner</span>
+                </li>
+                <li class="group-select-list-item group-select-list-item--selected">
+                    <span class="group-select-name">Group 1:</span>
+                    <span class="group-select-role">Owner</span>
+                </li>
+                <li class="group-select-list-item">
+                    <span class="group-select-name">Group 1:</span>
+                    <span class="group-select-role">Owner</span>
+                </li>
+            </ul>
+            <div id="group-select-button-container">
+                <button id="create-group-menu-button">Create</button>
+                <button id="load-group-menu-button">Load</button>
+            </div>
+            <a id="group-select-close-button" class="close"></a>
         </div>
     </div>
         

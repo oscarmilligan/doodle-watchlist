@@ -8,9 +8,14 @@ const createButton = document.getElementById("create-button");
 const createCategoryButton = document.getElementById("create-category")
 const SignoutButton = document.getElementById("log-out-button")
 const deleteCategoryButton = document.getElementById("delete-category")
-const groupMenuOpenButton = document.getElementById("group-button")
-const groupMenuContainer = document.getElementById("group-menu-container")
-const groupMenuCloseButton = document.getElementById("group-menu-close-button")
+const groupSelectOpenButton = document.getElementById("group-button")
+const groupSelectContainer = document.getElementById("group-select-container")
+const groupSelectCloseButton = document.getElementById("group-select-close-button")
+const groupAddContainer = document.getElementById("group-menu-container")
+const groupAddCloseButton = document.getElementById("group-menu-close-button")
+const groupAddOpenButton = document.getElementById("create-group-menu-button")
+const selectGroupMenuButton = document.getElementById("select-group-menu-button")
+
 const root = window.root
 
 var sidebarExpanded = true;
@@ -208,13 +213,24 @@ SignoutButton.addEventListener("click", () => {
     signOut();
 })
 
-groupMenuOpenButton.addEventListener("click", () => {
-    groupMenuContainer.classList.remove("hidden");
+groupSelectOpenButton.addEventListener("click", () => {
+    groupSelectContainer.classList.remove("hidden");
 })
 
-groupMenuCloseButton.addEventListener("click", () => {
-    groupMenuContainer.classList.add("hidden");
+groupSelectCloseButton.addEventListener("click", () => {
+    groupSelectContainer.classList.add("hidden");
 })
 
+groupAddCloseButton.addEventListener("click", () => {
+    groupAddContainer.classList.add("hidden");
+})
 
+groupAddOpenButton.addEventListener("click", () => {
+    groupAddContainer.classList.remove("hidden");
+    groupSelectContainer.classList.add("hidden");
+})
+selectGroupMenuButton.addEventListener("click", () => {
+    groupSelectContainer.classList.remove("hidden");
+    groupAddContainer.classList.add("hidden");
+})
 export {expandSidebar, switchCategory, saveCategory}

@@ -486,7 +486,7 @@ h1{
         outline: none;
     }
 
-/* group switch menu */
+/* group add menu (name is wrong)*/
 #group-switch-menu{
     display: grid;
     grid-template-areas:
@@ -494,49 +494,107 @@ h1{
     "text input"
     "footer footer";
     min-width: none;
-    padding: 10px 0;
+    padding: 10px;
     gap: 10px;
+    background-color: var(--clr-border-overlay);
 }
-
 #group-switch-menu span{
     display: inline;
     grid-area: text;
 }
-
 #group-switch-menu input{
     display: inline;
     grid-area: input;
 }
+
+
+#group-switch-menu > h2{
+    color: var(--clr-highlight);
+
+    grid-area: header;
+    border-color: var(--clr-text-light);
+    border-style: none none solid none;
+    border-width: 2px;
+    
+}
+
 #submit-group-id{
     display: inline;
     grid-area: footer;
     width: fit-content;
     justify-self: center;
 }
-#submit-group-id{
-    display: block;
-    background-color: inherit;
-    color: var(--clr-text);
-    padding: none;
-    border-color: #0c0b07;
-    border-width: 1px;
-    border-style: solid;
-    outline: none;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 125%
+
+#group-add-button-container{
+    display: flex;
     
+    grid-area: footer;
+    width: 90%;
+    justify-self: center;
+    justify-content: space-between;
+    padding: 1px 3px 3px 3px;
 }
-/* hover and not selected */
-#submit-group-id:hover{
-    background-color: var(--clr-highlight);
+#group-add-button-container > button {
+    width: 90px;
+    height: 30px;
+    background-color: var(--clr-body-bg);
+    border-style: solid;
+    border-color: var(--clr-card-border);
+    color: var(--clr-text);
 }
-/* selected tab button */
-#submit-group-id:focus {
-    background-color: var(--clr-selected);
+#group-add-button-container > button:hover {
+    background-color: var(--clr-card-border);
+    border-color: var(--clr-body-bg);
     color: var(--clr-text-light);
 }
+
+/* Group select menu */
+#group-select-menu{
+    padding: 10px;
+    background-color: var(--clr-border-overlay);
+}
+#group-select-menu > h2{
+    color: var(--clr-highlight);
+
+    border-color: var(--clr-text-light);
+    border-style: none none solid none;
+    border-width: 2px;
+    
+}
+#group-select-list{
+    padding-top: 10px;
+}
+.group-select-list-item{
+    display: flex;
+    justify-content: space-between;
+    padding: 3px;
+}
+.group-select-list-item:hover:not(.group-select-list-item--selected){
+    background-color: var(--clr-body-bg);
+}
+.group-select-list-item.group-select-list-item--selected{
+    background-color: var(--clr-highlight);
+    color: var(--clr-text);
+}
+#group-select-button-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 9px 3px 3px 3px;
+}
+#group-select-button-container > button {
+    width: 90px;
+    height: 30px;
+    background-color: var(--clr-body-bg);
+    border-style: solid;
+    border-color: var(--clr-card-border);
+    color: var(--clr-text);
+}
+#group-select-button-container > button:hover {
+    background-color: var(--clr-card-border);
+    border-color: var(--clr-body-bg);
+    color: var(--clr-text-light);
+}
+
 /* misc buttons */
 .close {
   position: absolute;
