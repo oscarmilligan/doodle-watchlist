@@ -40,6 +40,17 @@ const uiConfig = {
         
         console.log("User signed in:", user.email);
 
+        // save user email
+        db.collection(`users`).doc(`${user.uid}`).set({
+        email: user.email,
+        })
+        .then(() => {
+            console.log("Saved user email:",user.email);
+        })
+        .catch((error) => {
+            console.error("Error saving user info: ", error);
+        });
+
         loginDisplay.style.display = "none";
 
         //   return false to prevent redirect

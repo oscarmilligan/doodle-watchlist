@@ -3,6 +3,7 @@ import { switchCategory, saveCategory, expandSidebar } from "./sidebar.js";
 
 const canvas = document.getElementById("canvas");
 const sortInput = document.getElementById("sort-input")
+const createGroupButton = document.getElementById("submit-group-id")
 
 
 // other constants
@@ -324,6 +325,78 @@ function scaleUserUIElements(){
     scaleTextToFit(groupButton,false)
 }
 
+async function createNewGroup(groupName){
+    
+    const groupId = Date.now();
+    console.log("Creating new group with name:", groupName,"id:",groupId);
+
+    // update user permission display
+    var {email, userPermissions} = await loadActiveUserInfo(); 
+    console.log("Loaded user details:",email,userPermissions);
+    
+    userPermissions[groupId] = {
+        groupName: groupName,
+        permission: "owner"
+    }
+    saveActiveUserInfo(userPermissions);
+
+    // add group to database
+    var groupPermissions = {}
+    groupPermissions[window.user.uid] = "owner"
+
+    db.collection(`groups`).doc(`${groupId}`).set({
+        groupName: groupName,
+        groupPermissions: groupPermissions
+        })
+        .then(() => {
+            console.log("Saved group with permissions:",groupPermissions);
+        })
+        .catch((error) => {
+            console.error("Error saving group info: ", error);
+        });
+}
+
+async function loadActiveUserInfo(){
+    return new Promise((resolve, reject) => {
+        db.collection(`users`).doc(`${window.user.uid}`).get().then((doc) => {
+        console.log("retrieved doc reference");
+        
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+
+        // load doc data
+        const email = doc.data()["email"]
+        var userPermissions = doc.data()["groupPermissions"]
+
+        if (typeof userPermissions === 'undefined') {
+            userPermissions = {}
+        }
+
+        console.log("user info is:",email,userPermissions);
+        
+        resolve({email, userPermissions})
+
+    }).catch((error) => {
+            console.error("Error loading user info: ", error);
+            reject(error)
+        });;
+  })
+
+}
+function saveActiveUserInfo(userGroupPermissions){
+    // add group reference to user
+    db.collection(`users`).doc(`${window.user.uid}`).set({
+        email: window.user.email,
+        groupPermissions: userGroupPermissions
+        })
+        .then(() => {
+            console.log("Saved user info with permissions:",userGroupPermissions);
+        })
+        .catch((error) => {
+            console.error("Error saving user info: ", error);
+        });
+}
+
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log("Signed in user:", user.email);
@@ -348,6 +421,10 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+createGroupButton.addEventListener("click", () => {
+    console.log("Create button pressed");
+    createNewGroup("Test group 1")
+})
 sortInput.addEventListener("change",() => {
     sortCategory(window.currentCategory, sortInput.value, "asc")
 })
