@@ -250,7 +250,13 @@ async function saveImage(){ // update to use existing names for images which are
   let rating = 0 // default value
   let title = titleInput.textContent;
   let title_lower = title.toLowerCase();
-	let imagePath = `users/${user.uid}/images/${imageId}.png`;
+  let imagePath;
+  if(window.currentGroupId === "Personal"){
+	  imagePath = `users/${user.uid}/images/${imageId}.png`;
+  }
+  else{
+    imagePath = `groups/${window.currentGroupId}/images/${imageId}.png`;
+  }
 	let storageRef = firebase.storage().ref(imagePath);
 	let imageBlob = dataURItoBlob(imageLink);
 	let metadata = {"contentType":"image/png",}

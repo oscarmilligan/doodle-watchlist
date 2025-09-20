@@ -28,12 +28,15 @@
     --clr-scrollbar:#888;
     --clr-scrollbar-hover: #555;
 
+    --clr-alt-primary: #a9bca7;
+    --clr-alt-secondary: #fff;
+
     --overlay-opacity: 0.25;
 
     /* other settings */
     --text-outline: rgba(0, 0, 0, 0.8);
     --sidebar-width: 150px;
-    --focus-time: 0.5s;
+    --focus-time: 10s;
     
 }
 
@@ -569,12 +572,19 @@ h1{
     justify-content: space-between;
     padding: 3px;
 }
-.group-select-list-item:hover:not(.group-select-list-item--selected){
+.group-select-list-item:hover:not(.group-select-list-item--selected):not(.group-select-list-item--active){
     background-color: var(--clr-body-bg);
 }
 .group-select-list-item.group-select-list-item--selected{
     background-color: var(--clr-highlight);
     color: var(--clr-text);
+}
+
+.group-select-list-item.group-select-list-item--active{
+    background-color: var(--clr-body-bg);
+    color: var(--clr-alt-secondary);
+    border: none;
+    border-radius: 5px;
 }
 #group-select-button-container{
     display: flex;

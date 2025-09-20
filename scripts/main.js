@@ -4,6 +4,7 @@ import { switchCategory, saveCategory, expandSidebar } from "./sidebar.js";
 const canvas = document.getElementById("canvas");
 const sortInput = document.getElementById("sort-input")
 const createGroupButton = document.getElementById("create-group-button")
+const loadGroupButton = document.getElementById("load-group-menu-button")
 
 
 // other constants
@@ -154,21 +155,25 @@ function loadCategoryEntries(uid, categoryId, orderField = "name_lower",order = 
 }
 
 // load cards
-function loadAllCategories(uid, orderField = "name_lower",order = "asc"){    
+function loadAllCategories(uid, orderField = "name_lower",order = "asc", groupId = "Personal"){    
     // Get categories from db
-    const categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
-    categoryRef.get().then((querySnapshot) => {
-        
-        querySnapshot.forEach((doc) => {
-            console.log("Category:",doc.id, " => ", doc.data());
-            const categoryId = doc.id
-            const categoryName = doc.data()["name"]
-            // load category
-            loadCategory(categoryId, categoryName)
-            loadCategoryEntries(uid,categoryId, orderField, order)
+    if(groupId === "Personal"){
+        const categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
+        categoryRef.get().then((querySnapshot) => {
             
+            querySnapshot.forEach((doc) => {
+                console.log("Category:",doc.id, " => ", doc.data());
+                const categoryId = doc.id
+                const categoryName = doc.data()["name"]
+                // load category
+                loadCategory(categoryId, categoryName)
+                loadCategoryEntries(uid,categoryId, orderField, order)
+                
+            });
         });
-    });
+    }
+    // TODO:
+    
 }
 
 
@@ -409,9 +414,36 @@ function groupSelectClick(groupListItem, groupId){
     // update ui
     groupListItem.classList.add("group-select-list-item--selected")
 
-    // TODO:
+    groupSelectList.selected = groupId;
 }
+async function addGroupItem(groupSelectList, groupId, groupName, groupPermission){
+    const groupItem = document.createElement("li")
+    groupItem.classList.add("group-select-list-item")
 
+    if(groupId === window.currentGroupId){
+        groupItem.classList.add("group-select-list-item--active")
+    }
+    else{
+        groupItem.addEventListener("click",() => {
+            groupSelectClick(groupItem, groupId)
+        })
+    }
+
+    const groupNameElement = document.createElement("span")
+    groupNameElement.classList.add("group-select-name")
+    groupNameElement.textContent = groupName
+
+    const groupRoleElement = document.createElement("span")
+    groupRoleElement.classList.add("group-select-role")
+    groupRoleElement.textContent = groupPermission
+
+    groupItem.appendChild(groupNameElement)
+    groupItem.appendChild(groupRoleElement)
+
+    
+
+    groupSelectList.appendChild(groupItem)
+}
 async function loadGroupSelectButtons(){
     const groupSelectList = document.getElementById("group-select-list")
 
@@ -423,29 +455,38 @@ async function loadGroupSelectButtons(){
 
     const {email, userPermissions} = await loadActiveUserInfo()
     console.log("userPermissions:",userPermissions);
+
+    // Add personal group
+    addGroupItem(groupSelectList, "Personal", "Personal", "owner");
     
+    // add other groups
     for (const [groupId, permissions] of Object.entries(userPermissions)) {
-        const groupItem = document.createElement("li")
-        groupItem.classList.add("group-select-list-item")
-
-        const groupNameElement = document.createElement("span")
-        groupNameElement.classList.add("group-select-name")
-        groupNameElement.textContent = permissions["groupName"]
-
-        const groupRoleElement = document.createElement("span")
-        groupRoleElement.classList.add("group-select-role")
-        groupRoleElement.textContent = permissions["permission"]
-
-        groupItem.appendChild(groupNameElement)
-        groupItem.appendChild(groupRoleElement)
-
-        groupItem.addEventListener("click",() => {
-            groupSelectClick(groupItem, groupId)
-        })
-
-        groupSelectList.appendChild(groupItem)
+        addGroupItem(groupSelectList, groupId, permissions["groupName"], permissions["permission"]);
     }
 }
+
+createGroupButton.addEventListener("click", () => {
+    console.log("Create button pressed");
+    createNewGroup("Test group 1");
+})
+
+loadGroupButton.addEventListener("click", () => {
+    const groupSelectList = document.getElementById("group-select-list");
+    console.log("Selected groupId:",groupSelectList.selected);
+
+    window.currentGroupId = groupSelectList.selected;
+
+    // remove categories from ui
+    const categories = document.getElementsByClassName("main")
+    for (let i = categories.length-1; i >= 0; i--){
+        removeCategoryFromDOM(categories[i].id.slice(4))
+    }
+    
+})
+
+sortInput.addEventListener("change",() => {
+    sortCategory(window.currentCategory, sortInput.value, "asc");
+})
 
 
 firebase.auth().onAuthStateChanged(user => {
@@ -460,6 +501,7 @@ firebase.auth().onAuthStateChanged(user => {
 
     window.user = user
     window.currentCategory = null
+    window.currentGroupId = "Personal"
     
     // fix some element text scaling
     scaleUserUIElements()
@@ -473,26 +515,21 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-createGroupButton.addEventListener("click", () => {
-    console.log("Create button pressed");
-    createNewGroup("Test group 1")
-})
-sortInput.addEventListener("change",() => {
-    sortCategory(window.currentCategory, sortInput.value, "asc")
-})
-
 document.addEventListener("DOMContentLoaded", () => {
     // fix sidebar width
     const baseSidebarWidth = window.getComputedStyle(root).getPropertyValue("--sidebar-width");
     console.log("Base sidebar width:",baseSidebarWidth);
-
-    // fix some element text scaling
-    scaleUserUIElements()
     
     const sidebar = document.getElementById("sidebar");
     sidebar.style.width = baseSidebarWidth;
 
-    window.baseSidebarWidth = baseSidebarWidth
+    window.baseSidebarWidth = baseSidebarWidth;
+
+    // fix some element text scaling
+    scaleUserUIElements();
+    
+    // set startup variables
+    window.currentGroupId = "Personal"
 
 });
 export {updateCard, createCategoryElements, loadCategory, scaleTextToFit}
