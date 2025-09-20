@@ -1,5 +1,5 @@
 import {focusCard} from "./focuscard.js"
-import { switchCategory, saveCategory, expandSidebar } from "./sidebar.js";
+import { switchCategory, saveCategory, expandSidebar, removeCategoryFromDOM } from "./sidebar.js";
 
 const canvas = document.getElementById("canvas");
 const sortInput = document.getElementById("sort-input")
@@ -92,6 +92,9 @@ function loadCategoryEntries(uid, categoryId, orderField = "name_lower",order = 
 
     // load cards
     var categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`);
+    if (window.currentGroupId !== "Personal"){
+        categoryRef = db.collection(`groups`).doc(`${window.currentGroupId}`).collection(`categories`);
+    }
     var entriesRef = categoryRef.doc(`${categoryId}`).collection("entries").orderBy(orderField,order)
     if (orderField != "name_lower"){
         entriesRef = entriesRef.orderBy("name_lower") // add name as secondary order field
@@ -106,8 +109,12 @@ function loadCategoryEntries(uid, categoryId, orderField = "name_lower",order = 
             const watched = doc.data()["watched"];
 
 
-            let userPath = `users/${uid}`;
-            let storageRef = firebase.storage().ref(userPath);
+            let storagePath = `users/${uid}`;
+            
+            if (window.currentGroupId !== "Personal"){
+                storagePath = `groups/${window.currentGroupId}`;
+            }
+            let storageRef = firebase.storage().ref(storagePath);
             
             // create card element
             const card = document.createElement("div");
@@ -155,24 +162,26 @@ function loadCategoryEntries(uid, categoryId, orderField = "name_lower",order = 
 }
 
 // load cards
-function loadAllCategories(uid, orderField = "name_lower",order = "asc", groupId = "Personal"){    
+function loadAllCategories(uid, orderField = "name_lower",order = "asc"){    
     // Get categories from db
-    if(groupId === "Personal"){
-        const categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
-        categoryRef.get().then((querySnapshot) => {
-            
-            querySnapshot.forEach((doc) => {
-                console.log("Category:",doc.id, " => ", doc.data());
-                const categoryId = doc.id
-                const categoryName = doc.data()["name"]
-                // load category
-                loadCategory(categoryId, categoryName)
-                loadCategoryEntries(uid,categoryId, orderField, order)
-                
-            });
-        });
+    var categoryRef = db.collection(`users`).doc(`${uid}`).collection(`categories`)
+    if(window.currentGroupId !== "Personal"){
+        categoryRef = db.collection(`groups`).doc(`${window.currentGroupId}`).collection(`categories`)
     }
-    // TODO:
+    categoryRef.get().then((querySnapshot) => {
+        
+        querySnapshot.forEach((doc) => {
+            console.log("Category:",doc.id, " => ", doc.data());
+            const categoryId = doc.id
+            const categoryName = doc.data()["name"]
+            // load category
+            loadCategory(categoryId, categoryName)
+            loadCategoryEntries(uid,categoryId, orderField, order)
+            
+        });
+    });
+    
+    
     
 }
 
@@ -202,9 +211,15 @@ function updateCard(card) {
     const uid= window.user.uid;
     const entryId = card.style.getPropertyValue("--entry-id");
     const categoryId = window.currentCategory
-    console.log("Updating card with entryID",entryId,"at",`users/${uid}/entries/${entryId}`);
     
-    db.collection(`users`).doc(`${uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryId}`).get().then((doc) => {
+
+    var dbPathRef = db.collection(`users`).doc(`${uid}`)
+    if (window.currentGroupId !== "Personal"){
+        dbPathRef = db.collection("groups").doc(`${window.currentGroupId}`)
+    }
+    console.log("Updating card with entryID",entryId,"at",`${dbPathRef.collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryId}`)}`);
+
+    dbPathRef.collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryId}`).get().then((doc) => {
         console.log("retrieved doc reference");
         
         // doc.data() is never undefined for query doc snapshots
@@ -218,6 +233,9 @@ function updateCard(card) {
 
         // get storage reference
         let userPath = `users/${uid}`;
+        if (window.currentGroupId !== "Personal"){
+            userPath = `groups/${window.currentGroupId}`;
+        } 
         let storageRef = firebase.storage().ref(userPath);
 
         //move to appropriate gallery
@@ -446,7 +464,7 @@ async function addGroupItem(groupSelectList, groupId, groupName, groupPermission
 }
 async function loadGroupSelectButtons(){
     const groupSelectList = document.getElementById("group-select-list")
-
+    groupSelectList.selected = null;
     // clear existing list items
     while (groupSelectList.firstChild){
         groupSelectList.removeChild(groupSelectList.lastChild);
@@ -468,10 +486,17 @@ async function loadGroupSelectButtons(){
 createGroupButton.addEventListener("click", () => {
     console.log("Create button pressed");
     createNewGroup("Test group 1");
+    loadGroupSelectButtons();
 })
 
 loadGroupButton.addEventListener("click", () => {
     const groupSelectList = document.getElementById("group-select-list");
+    const groupButtonGroupId = document.getElementById("group-button-group-id")
+
+    if(!groupSelectList.selected){
+        return;
+    } 
+
     console.log("Selected groupId:",groupSelectList.selected);
 
     window.currentGroupId = groupSelectList.selected;
@@ -482,6 +507,11 @@ loadGroupButton.addEventListener("click", () => {
         removeCategoryFromDOM(categories[i].id.slice(4))
     }
     
+    groupButtonGroupId.textContent = groupSelectList.selected;
+    scaleUserUIElements();
+    
+    loadAllCategories(user.uid)
+    loadGroupSelectButtons()
 })
 
 sortInput.addEventListener("change",() => {

@@ -314,8 +314,11 @@ async function saveImage(){ // update to use existing names for images which are
         console.log("File available at", downloadURL);
         console.log("Updating database at",`users/${window.user.uid}/categories/${categoryId}/entries/${entryID}`);
         
-        
-        db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryID}`).set({
+        let dbEntryPath = db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryID}`);
+        if(!(window.currentGroupId === "Personal")){
+          dbEntryPath = db.collection(`groups`).doc(`${window.currentGroupId}`).collection(`categories`).doc(`${categoryId}`).collection("entries").doc(`${entryID}`);
+        }
+        dbEntryPath.set({
         name: title,
         name_lower: title_lower,
         rating: rating,

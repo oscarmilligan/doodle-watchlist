@@ -129,7 +129,13 @@ function switchCategory(categoryId, button = null){
 }
 
 function saveCategory(categoryId, categoryName){
-    db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${categoryId}`).set({
+    var dbPathRef = db.collection(`users`).doc(`${window.user.uid}`)
+
+    if (window.currentGroupId !== "Personal"){
+        dbPathRef = db.collection("groups").doc(`${window.currentGroupId}`)
+    }
+
+    dbPathRef.collection(`categories`).doc(`${categoryId}`).set({
         name: categoryName,
         })
         .then(() => {
@@ -148,7 +154,13 @@ function saveCategory(categoryId, categoryName){
 
 function deleteCategory(categoryId){
     console.log("Deleting category db entry...");
-    db.collection(`users`).doc(`${window.user.uid}`).collection(`categories`).doc(`${window.currentCategory}`).delete().then(() => {
+    var dbPathRef = db.collection(`users`).doc(`${window.user.uid}`)
+
+    if (window.currentGroupId !== "Personal"){
+        dbPathRef = db.collection("groups").doc(`${window.currentGroupId}`)
+    }
+
+    dbPathRef.collection(`categories`).doc(`${window.currentCategory}`).delete().then(() => {
         console.log("Database entry successfully deleted from:",`users/${window.user.uid}/categories/${window.currentCategory}`);
         
         // delete the ui
@@ -233,4 +245,4 @@ selectGroupMenuButton.addEventListener("click", () => {
     groupSelectContainer.classList.remove("hidden");
     groupAddContainer.classList.add("hidden");
 })
-export {expandSidebar, switchCategory, saveCategory}
+export {expandSidebar, switchCategory, saveCategory, removeCategoryFromDOM}
