@@ -365,17 +365,20 @@ async function createNewGroup(groupName){
     // add group to database
     var groupPermissions = {}
     groupPermissions[window.user.uid] = "owner"
-
+    return new Promise((resolve, reject) => {
     db.collection(`groups`).doc(`${groupId}`).set({
         groupName: groupName,
         groupPermissions: groupPermissions
         })
         .then(() => {
             console.log("Saved group with permissions:",groupPermissions);
+            resolve(groupId)
         })
         .catch((error) => {
             console.error("Error saving group info: ", error);
+            reject(error)
         });
+    })
 }
 
 async function loadActiveUserInfo(){
@@ -482,11 +485,40 @@ async function loadGroupSelectButtons(){
         addGroupItem(groupSelectList, groupId, permissions["groupName"], permissions["permission"]);
     }
 }
+async function createGroupButtonClicked(){
+    const groupIdInput = document.getElementById("group-id-input")
+    const createGroupMenu = document.getElementById("group-menu-container")
+    const groupButtonGroupId = document.getElementById("group-button-group-id")
+    if(groupIdInput.value.length <= 0){
+        alert("Enter a group name!")
+        return
+    }
+    console.log("Create button pressed");
+    const groupId = await createNewGroup(groupIdInput.value);
+    console.log("New groupId:",groupId);
+    
+    loadGroupSelectButtons();
+
+    // load new group
+    window.currentGroupId = groupId;
+
+    // remove categories from ui
+    const categories = document.getElementsByClassName("main")
+    for (let i = categories.length-1; i >= 0; i--){
+        removeCategoryFromDOM(categories[i].id.slice(4))
+    }
+    
+    groupButtonGroupId.textContent = groupId;
+    scaleUserUIElements();
+    
+    loadAllCategories(user.uid)
+    loadGroupSelectButtons()
+    
+    createGroupMenu.classList.add("hidden")
+}
 
 createGroupButton.addEventListener("click", () => {
-    console.log("Create button pressed");
-    createNewGroup("Test group 1");
-    loadGroupSelectButtons();
+    createGroupButtonClicked()
 })
 
 loadGroupButton.addEventListener("click", () => {
