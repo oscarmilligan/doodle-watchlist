@@ -425,18 +425,56 @@ function saveActiveUserInfo(userGroupPermissions){
 function groupSelectClick(groupListItem, groupId){
     const groupSelectList = document.getElementById("group-select-list")
 
-    // clear any selected grouop
+    // clear any selected group and button
     for (const li of groupSelectList.children) {
         if(li.classList.contains("group-select-list-item--selected")){
             li.classList.remove("group-select-list-item--selected")
+            if(li.getElementsByClassName("group-delete-button")[0]){
+                li.removeChild(li.getElementsByClassName("group-delete-button")[0]);
+            }
         }
     }
-
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("group-delete-button");
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => {
+        deleteGroup(groupListItem, groupId)
+    })
     // update ui
     groupListItem.classList.add("group-select-list-item--selected")
+    groupListItem.appendChild(deleteButton)
 
     groupSelectList.selected = groupId;
 }
+
+async function deleteGroup(groupListItem, groupId){
+    const {email, userPermissions} = await loadActiveUserInfo()
+    const groupPermissions = userPermissions[groupId];
+
+    console.log("Deleting group db entry...");
+    if(groupId === "Personal"){
+        alert("You cannot delete your personal group.");
+        return;
+    }else if(groupPermissions["permission"] !== "owner"){
+        alert("You must be owner to delete group.");
+        return;
+    }
+    const dbPathRef = db.collection("groups").doc(`${groupId}`)
+
+    dbPathRef.delete().then(() => {
+        console.log("Database entry successfully deleted from:",`groups/${groupId}`);
+        delete userPermissions[groupId];
+        saveActiveUserInfo(userPermissions)
+
+        groupListItem.remove();
+        console.log("UI elements deleted");
+        
+
+    }).catch((error) => {
+        console.log("Failed to delete db entry due to:",error);
+    })
+}
+
 async function addGroupItem(groupSelectList, groupId, groupName, groupPermission){
     const groupItem = document.createElement("li")
     groupItem.classList.add("group-select-list-item")
@@ -488,7 +526,6 @@ async function loadGroupSelectButtons(){
 async function createGroupButtonClicked(){
     const groupIdInput = document.getElementById("group-id-input")
     const createGroupMenu = document.getElementById("group-menu-container")
-    const groupButtonGroupId = document.getElementById("group-button-group-id")
     if(groupIdInput.value.length <= 0){
         alert("Enter a group name!")
         return
@@ -497,8 +534,14 @@ async function createGroupButtonClicked(){
     const groupId = await createNewGroup(groupIdInput.value);
     console.log("New groupId:",groupId);
     
-    loadGroupSelectButtons();
+    loadNewGroupToDOM(groupId);
 
+    createGroupMenu.classList.add("hidden")
+}
+
+function loadNewGroupToDOM(groupId){
+    
+    const groupButtonGroupId = document.getElementById("group-button-group-id")
     // load new group
     window.currentGroupId = groupId;
 
@@ -514,7 +557,6 @@ async function createGroupButtonClicked(){
     loadAllCategories(user.uid)
     loadGroupSelectButtons()
     
-    createGroupMenu.classList.add("hidden")
 }
 
 createGroupButton.addEventListener("click", () => {

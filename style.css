@@ -569,6 +569,7 @@ h1{
 }
 .group-select-list-item{
     display: flex;
+    position: relative;
     justify-content: space-between;
     padding: 3px;
 }
@@ -591,7 +592,7 @@ h1{
     justify-content: space-between;
     padding: 9px 3px 3px 3px;
 }
-#group-select-button-container > button {
+#group-select-button-container > button, .group-delete-button{
     width: 90px;
     height: 30px;
     background-color: var(--clr-body-bg);
@@ -599,10 +600,18 @@ h1{
     border-color: var(--clr-card-border);
     color: var(--clr-text);
 }
-#group-select-button-container > button:hover {
+#group-select-button-container > button:hover, .group-delete-button:hover {
     background-color: var(--clr-card-border);
     border-color: var(--clr-body-bg);
     color: var(--clr-text-light);
+}
+
+.group-delete-button{
+    position:absolute;
+    top: 0;
+    left: calc(100% + 5px);
+    width: 50px;
+    height: 25px;
 }
 
 /* misc buttons */
