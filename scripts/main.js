@@ -1,5 +1,5 @@
 import {focusCard} from "./focuscard.js"
-import { switchCategory, saveCategory, expandSidebar, removeCategoryFromDOM } from "./sidebar.js";
+import { switchCategory, saveCategory, expandSidebar, removeCategoryFromDOM, createNewCategory } from "./sidebar.js";
 
 const canvas = document.getElementById("canvas");
 const sortInput = document.getElementById("sort-input")
@@ -478,9 +478,14 @@ async function deleteGroup(groupListItem, groupId){
 async function addGroupItem(groupSelectList, groupId, groupName, groupPermission){
     const groupItem = document.createElement("li")
     groupItem.classList.add("group-select-list-item")
+    console.log("selected groupId:",typeof(window.currentGroupId));
+    console.log("current groupId:",typeof(groupId));
 
-    if(groupId === window.currentGroupId){
+    
+    if(groupId == window.currentGroupId){
         groupItem.classList.add("group-select-list-item--active")
+        console.log("Set",groupItem,"to active");
+        
     }
     else{
         groupItem.addEventListener("click",() => {
@@ -537,6 +542,11 @@ async function createGroupButtonClicked(){
     loadNewGroupToDOM(groupId);
 
     createGroupMenu.classList.add("hidden")
+    console.log("creating new category");
+    createNewCategory();
+    console.log("created");
+    
+
 }
 
 function loadNewGroupToDOM(groupId){
@@ -554,7 +564,6 @@ function loadNewGroupToDOM(groupId){
     groupButtonGroupId.textContent = groupId;
     scaleUserUIElements();
     
-    loadAllCategories(user.uid)
     loadGroupSelectButtons()
     
 }

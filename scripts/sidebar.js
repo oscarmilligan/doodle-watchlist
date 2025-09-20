@@ -245,4 +245,4 @@ selectGroupMenuButton.addEventListener("click", () => {
     groupSelectContainer.classList.remove("hidden");
     groupAddContainer.classList.add("hidden");
 })
-export {expandSidebar, switchCategory, saveCategory, removeCategoryFromDOM}
+export {expandSidebar, switchCategory, saveCategory, removeCategoryFromDOM, createNewCategory}
