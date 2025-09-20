@@ -36,7 +36,7 @@
     /* other settings */
     --text-outline: rgba(0, 0, 0, 0.8);
     --sidebar-width: 150px;
-    --focus-time: 10s;
+    --focus-time: 0.5s;
     
 }
 

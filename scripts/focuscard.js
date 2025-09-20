@@ -50,11 +50,10 @@ function focusCard (card){
         }
 
         // get card position
-        const leftpos = card.offsetLeft;
-        const toppos = card.offsetTop - window.scrollY;
-        const width = card.width;
-        const height = card.height;
-        // console.log(leftpos+"px",toppos +"px")
+        var card_rect = card.getBoundingClientRect();
+        const leftpos = card_rect.left;
+        const toppos = card_rect.top - window.scrollY;
+        console.log(leftpos+"px",toppos +"px")
 
         // get canvas position
         var canv_rect = canvas.getBoundingClientRect();
@@ -75,6 +74,8 @@ function focusCard (card){
         card.style.position = "fixed";
         card.style.left = leftpos +"px";
         card.style.top = toppos +"px";
+        console.log(card.style.left,card.style.top );
+        
         
         // pass canvas position to card
         card.style.setProperty("--canv-left",canvleft+"px")
