@@ -49,6 +49,7 @@ function scaleTextToFit(element, getTextContentFromChildren = false, width=-1, h
         
         element.style.fontSize = `${newSize}px`;
         console.log("after:",element.style.fontSize);
+        return newSize
     }
     else{
         console.log("Cannot rescale text, width is 0");
@@ -340,11 +341,15 @@ function scaleUserUIElements(){
     const sidebarWidth = Number(window.getComputedStyle(root).getPropertyValue("--sidebar-width").slice(0,-2));
 
     const usernameDisplay = document.getElementById("username-display");
-    const groupIDText = document.getElementById("group-id-text")
-    const groupButtonGroupID = document.getElementById("group-button-group-id")
-    const groupButton = document.getElementById("group-id-display")
+    const groupIdDisplay = document.getElementById("group-id-display")
+    const groupNameDisplay = document.getElementById("group-name-display")
     scaleTextToFit(usernameDisplay)
-    scaleTextToFit(groupButton,false)
+    const userGroupElements = [groupIdDisplay, groupNameDisplay]
+    for (const element of userGroupElements) {
+        scaleTextToFit(element, false, Number(window.getComputedStyle(root).getPropertyValue("--sidebar-width").slice(0,-2)), 12)
+    }
+
+    
 }
 
 async function createNewGroup(groupName){
@@ -422,7 +427,7 @@ function saveActiveUserInfo(userGroupPermissions){
         });
 }
 
-function groupSelectClick(groupListItem, groupId){
+function groupSelectClick(groupListItem, groupId, groupName){
     const groupSelectList = document.getElementById("group-select-list")
 
     // clear any selected group and button
@@ -444,7 +449,8 @@ function groupSelectClick(groupListItem, groupId){
     groupListItem.classList.add("group-select-list-item--selected")
     groupListItem.appendChild(deleteButton)
 
-    groupSelectList.selected = groupId;
+    groupSelectList.selectedId = groupId;
+    groupSelectList.selectedName = groupName;
 }
 
 async function deleteGroup(groupListItem, groupId){
@@ -489,7 +495,7 @@ async function addGroupItem(groupSelectList, groupId, groupName, groupPermission
     }
     else{
         groupItem.addEventListener("click",() => {
-            groupSelectClick(groupItem, groupId)
+            groupSelectClick(groupItem, groupId, groupName)
         })
     }
 
@@ -530,16 +536,17 @@ async function loadGroupSelectButtons(){
 }
 async function createGroupButtonClicked(){
     const groupIdInput = document.getElementById("group-id-input")
-    const createGroupMenu = document.getElementById("group-menu-container")
-    if(groupIdInput.value.length <= 0){
+    const createGroupMenu = document.getElementById("group-add-container")
+    const groupName =groupIdInput.value
+    if(groupName.length <= 0){
         alert("Enter a group name!")
         return
     }
     console.log("Create button pressed");
-    const groupId = await createNewGroup(groupIdInput.value);
+    const groupId = await createNewGroup(groupName);
     console.log("New groupId:",groupId);
     
-    loadNewGroupToDOM(groupId);
+    loadNewGroupToDOM(groupId, groupName);
 
     createGroupMenu.classList.add("hidden")
     console.log("creating new category");
@@ -549,11 +556,13 @@ async function createGroupButtonClicked(){
 
 }
 
-function loadNewGroupToDOM(groupId){
+function loadNewGroupToDOM(groupId,groupName){
     
     const groupButtonGroupId = document.getElementById("group-button-group-id")
+    const groupButtonGroupName = document.getElementById("group-button-group-name")
     // load new group
     window.currentGroupId = groupId;
+    window.currentGroupName = groupName;
 
     // remove categories from ui
     const categories = document.getElementsByClassName("main")
@@ -562,6 +571,7 @@ function loadNewGroupToDOM(groupId){
     }
     
     groupButtonGroupId.textContent = groupId;
+    groupButtonGroupName.textContent = groupName;
     scaleUserUIElements();
     
     loadGroupSelectButtons()
@@ -576,25 +586,13 @@ loadGroupButton.addEventListener("click", () => {
     const groupSelectList = document.getElementById("group-select-list");
     const groupButtonGroupId = document.getElementById("group-button-group-id")
 
-    if(!groupSelectList.selected){
-        return;
-    } 
+    loadNewGroupToDOM(groupSelectList.selectedId, groupSelectList.selectedName)
 
-    console.log("Selected groupId:",groupSelectList.selected);
-
-    window.currentGroupId = groupSelectList.selected;
-
-    // remove categories from ui
-    const categories = document.getElementsByClassName("main")
-    for (let i = categories.length-1; i >= 0; i--){
-        removeCategoryFromDOM(categories[i].id.slice(4))
-    }
     
-    groupButtonGroupId.textContent = groupSelectList.selected;
+    groupButtonGroupId.textContent = groupSelectList.selectedId;
     scaleUserUIElements();
     
     loadAllCategories(user.uid)
-    loadGroupSelectButtons()
 })
 
 sortInput.addEventListener("change",() => {
@@ -615,6 +613,9 @@ firebase.auth().onAuthStateChanged(user => {
     window.user = user
     window.currentCategory = null
     window.currentGroupId = "Personal"
+    const groupSelectList = document.getElementById("group-select-list")
+    groupSelectList.selectedId = "Personal";
+    groupSelectList.selectedName = "Personal";
     
     // fix some element text scaling
     scaleUserUIElements()

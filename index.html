@@ -32,7 +32,8 @@
     <div id="sidebar">
         <div id="sidebar-profile-container">
             <span id="username-display">username</span>
-            <span id="group-id-display"><span id="group-id-text">Group ID: </span><span id="group-button-group-id">Personal</span></span>
+            <span id="group-name-display" class="group-info-display"><span id="group-name-text">Group Name: </span><span id="group-button-group-name">Personal</span></span>
+            <span id="group-id-display" class="group-info-display"><span id="group-id-text">Group ID: </span><span id="group-button-group-id">Personal</span></span>
             <div id="group-icon-container">
                 <i id="group-button" class="fa-solid fa-users"></i>
                 <i class="fa-solid fa-bell"></i>
@@ -108,8 +109,8 @@
         <a id="close-paint" class="close"></a>
     </div>
 
-    <div id="group-menu-container" class="focused-background hidden">
-        <div id="group-switch-menu" class="center-focus-box">
+    <div id="group-add-container" class="focused-background hidden">
+        <div id="group-switch-menu" class="center-focus-box group-menu">
             <h2 id="group-switch-menu-header">Create Group</h2>
             <span>Group Name:</span><input id="group-id-input" type="text">
             <div id="group-add-button-container">
@@ -121,7 +122,7 @@
     </div>
 
     <div id="group-select-container" class="focused-background hidden">
-        <div id="group-select-menu" class="center-focus-box">
+        <div id="group-select-menu" class="center-focus-box group-menu">
             <h2 id="group-select-header">Group Select</h2>
             <ul id="group-select-list">
                 <li class="group-select-list-item">
@@ -144,9 +145,31 @@
             <a id="group-select-close-button" class="close"></a>
         </div>
     </div>
-        
+<!--     
+    <div id="group-menu-container" class="focused-background">
+        <div id="group-menu" class="center-focus-box group-menu">
+            <h2 id="group-select-header">Group Select</h2>
+            <ul id="group-select-list">
+                <li class="group-select-list-item">
+                    <span class="group-select-name">Group 1:</span>
+                    <span class="group-select-role">Owner</span>
+                </li>
+                
+                <li class="group-select-list-item">
+                    <span class="group-select-name">Group 1:</span>
+                    <span class="group-select-role">Owner</span>
+                </li>
+            </ul>
+            <div id="group-select-button-container">
+                <button id="load-group-menu-button">Load</button>
+                <button id="create-group-menu-button">Create</button>
+            </div>
+            <a id="group-select-close-button" class="close"></a>
+        </div>
+    </div> -->
+    
 
-    </div>
+</div>
 
 <script type="module" src="./scripts/main.js"></script>
 <script src="./scripts/firebaseui.js"></script>

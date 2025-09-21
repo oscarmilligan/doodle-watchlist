@@ -133,7 +133,10 @@ body{
 #sidebar-profile-container {
     text-align: center;
     padding-top: 5px;
-    background-color: var(--clr-tertiary);
+
+    border-style: none none solid none;
+    border-color: var(--clr-tertiary);
+    border-radius: 20px;
 }
 #log-out-button:hover, #group-button:hover{
     cursor: pointer;
@@ -148,7 +151,7 @@ body{
     width: 100%;
 }
 
-#group-id-display span{
+#group-id-display span, #group-name-display span{
     display: inline;
 }
 #group-icon-container{
@@ -526,12 +529,8 @@ h1{
 
 
 #group-switch-menu > h2{
-    color: var(--clr-highlight);
 
     grid-area: header;
-    border-color: var(--clr-text-light);
-    border-style: none none solid none;
-    border-width: 2px;
     
 }
 
@@ -566,12 +565,12 @@ h1{
 }
 
 /* Group select menu */
-#group-select-menu{
+.group-menu{
     padding: 10px;
     background-color: var(--clr-border-overlay);
 }
-#group-select-menu > h2{
-    color: var(--clr-highlight);
+.group-menu > h2{
+    color: var(--clr-title);
 
     border-color: var(--clr-text-light);
     border-style: none none solid none;
