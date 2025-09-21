@@ -15,6 +15,7 @@
 
         <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.js"></script>
         <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" />
+        <script src="https://kit.fontawesome.com/0f0ea3c809.js" crossorigin="anonymous"></script>
 
 
     </head>
@@ -31,7 +32,11 @@
     <div id="sidebar">
         <div id="sidebar-profile-container">
             <span id="username-display">username</span>
-            <a id="group-button"><span id="group-id-text">Group ID: </span><span id="group-button-group-id">Personal</span></a>
+            <span id="group-id-display"><span id="group-id-text">Group ID: </span><span id="group-button-group-id">Personal</span></span>
+            <div id="group-icon-container">
+                <i id="group-button" class="fa-solid fa-users"></i>
+                <i class="fa-solid fa-bell"></i>
+            </div>
             <a id="log-out-button">Log Out</a>
         </div>
 

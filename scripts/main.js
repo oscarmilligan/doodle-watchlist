@@ -342,7 +342,7 @@ function scaleUserUIElements(){
     const usernameDisplay = document.getElementById("username-display");
     const groupIDText = document.getElementById("group-id-text")
     const groupButtonGroupID = document.getElementById("group-button-group-id")
-    const groupButton = document.getElementById("group-button")
+    const groupButton = document.getElementById("group-id-display")
     scaleTextToFit(usernameDisplay)
     scaleTextToFit(groupButton,false)
 }

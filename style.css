@@ -23,7 +23,7 @@
 
     --clr-sidebar-bg: #6b533c;
     --clr-highlight: #ddd;
-    --clr-selected: rgb(66, 51, 36);
+    --clr-tertiary: rgb(66, 51, 36);
 
     --clr-scrollbar:#888;
     --clr-scrollbar-hover: #555;
@@ -101,14 +101,15 @@ body{
     left: 0;
     background-color: var(--clr-sidebar-bg);
     overflow-x: hidden;
-    overflow-y: scroll;
-    padding-top: 20px;
+    overflow-y: auto;
+    padding-top: 0;
+    padding-right: 0;
     transition: ease 0.4s;
     justify-content: space-between;
     min-height: 100vh;
     gap: 20px;
-
 }
+
 #sidebar.sidebar--minimised{
     transform: translateX(-100%);
 }
@@ -119,7 +120,7 @@ body{
 
 
 #sidebar a, #sidebar span{
-    padding: 0 0 10px 0;
+    padding: 0 0 5px 0;
     text-decoration: none;
     font-size: 100%;
     color: var(--clr-text-light);
@@ -131,6 +132,8 @@ body{
 
 #sidebar-profile-container {
     text-align: center;
+    padding-top: 5px;
+    background-color: var(--clr-tertiary);
 }
 #log-out-button:hover, #group-button:hover{
     cursor: pointer;
@@ -138,14 +141,25 @@ body{
 
 
 #sidebar-card-button-container{
-    padding-bottom: 20px;
+    padding-bottom: 0;
 }
 #sidebar-tab-container, #sidebar-profile-container, #sidebar-card-button-container{
     position: relative;
     width: 100%;
 }
-#group-button span{
+
+#group-id-display span{
     display: inline;
+}
+#group-icon-container{
+    padding: 0 0 5px 0;
+}
+#group-icon-container > i{
+    color: var(--clr-text-light);
+}
+#group-icon-container > i:hover{
+    color: var(--clr-text-lighter);
+    cursor: pointer;
 }
 
 .search-box{
@@ -187,7 +201,7 @@ body{
 }
 /* selected tab button */
 .tab-button.tab-button--pressed {
-    background-color: var(--clr-selected);
+    background-color: var(--clr-tertiary);
     color: var(--clr-text-light);
 }
 .expand-button{
