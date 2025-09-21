@@ -88,6 +88,7 @@ body{
     transform: translateX(-50%) translateY(-50%);
     background-color: var(--clr-overlay-transparent);
     min-width: 300px;
+    border-radius: 5px;
 }
 
 /* sidebar styling */
@@ -541,7 +542,7 @@ h1{
     justify-self: center;
 }
 
-#group-add-button-container{
+#group-add-button-container, .two-button-container{
     display: flex;
     
     grid-area: footer;
@@ -550,7 +551,7 @@ h1{
     justify-content: space-between;
     padding: 1px 3px 3px 3px;
 }
-#group-add-button-container > button {
+#group-add-button-container > button, .two-button-container  > button{
     width: 90px;
     height: 30px;
     background-color: var(--clr-body-bg);
@@ -558,7 +559,7 @@ h1{
     border-color: var(--clr-card-border);
     color: var(--clr-text);
 }
-#group-add-button-container > button:hover {
+#group-add-button-container > button:hover, .two-button-container  > button:hover {
     background-color: var(--clr-card-border);
     border-color: var(--clr-body-bg);
     color: var(--clr-text-light);
@@ -625,6 +626,13 @@ h1{
     left: calc(100% + 5px);
     width: 50px;
     height: 25px;
+}
+/* Group join menu */
+#group-join-input-container{
+    margin: 10px 0;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
 }
 
 /* misc buttons */

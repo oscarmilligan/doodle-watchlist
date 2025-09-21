@@ -15,6 +15,11 @@ const groupAddContainer = document.getElementById("group-add-container")
 const groupAddCloseButton = document.getElementById("group-menu-close-button")
 const groupAddOpenButton = document.getElementById("create-group-menu-button")
 const selectGroupMenuButton = document.getElementById("select-group-menu-button")
+const joinMenuButton = document.getElementById("join-menu-button")
+const joinMenuCloseButton = document.getElementById("join-menu-close-button")
+const viewSentMenuButton = document.getElementById("view-sent-menu-button")
+const sendRequestButton = document.getElementById("send-request-button")
+const joinMenuContainer = document.getElementById("group-join-container")
 
 const root = window.root
 
@@ -245,4 +250,17 @@ selectGroupMenuButton.addEventListener("click", () => {
     groupSelectContainer.classList.remove("hidden");
     groupAddContainer.classList.add("hidden");
 })
+joinMenuButton.addEventListener("click",() => {
+    joinMenuContainer.classList.remove("hidden")
+})
+joinMenuCloseButton.addEventListener("click", () => {
+    joinMenuContainer.classList.add("hidden")
+})
+viewSentMenuButton.addEventListener("click", () => {
+    alert("WIP")
+})
+sendRequestButton.addEventListener("click", () => {
+    alert("WIP")
+})
+
 export {expandSidebar, switchCategory, saveCategory, removeCategoryFromDOM, createNewCategory}
